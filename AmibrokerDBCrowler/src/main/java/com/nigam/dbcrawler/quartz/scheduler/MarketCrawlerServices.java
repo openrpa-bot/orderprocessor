@@ -47,10 +47,9 @@ public class MarketCrawlerServices implements JobListener {
         Trigger duringMarketTrigger = TriggerBuilder.newTrigger()
                 .forJob(duringMarketJob)
                 .withIdentity("TRIGGER_DURING_MARKET", CRAWLER_JOB_GROUP)
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInMinutes(5)
-                        .repeatForever())
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 9-15 * * ?"))
                 .build();
+
 
         tryToAddTrigger(duringMarketTrigger);
 
@@ -65,10 +64,9 @@ public class MarketCrawlerServices implements JobListener {
         Trigger afterMarketTrigger = TriggerBuilder.newTrigger()
                 .forJob(afterMarketJob)
                 .withIdentity("TRIGGER_AFTER_MARKET", CRAWLER_JOB_GROUP)
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInHours(1)
-                        .repeatForever())
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 16-22/2 * * ?"))
                 .build();
+
 
         tryToAddTrigger(afterMarketTrigger);
 
