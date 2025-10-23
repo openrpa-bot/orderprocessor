@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,44 +44,52 @@ public class MarketDBCrawler {
         List<AmibrokerGrafanaAlgoRecord> allRecords = dynamicAmibrokerReadOnlyRepository.findAll(tableName);
         List<ResistenceSupportRecord> allQuarterly_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Quarterly");
         List<ResistenceSupportRecord> allMonthly_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Monthly");
-        //List<ResistenceSupportRecord> allWeekly_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Weekly");
-        //List<ResistenceSupportRecord> allDaily_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Daily");
 
         log.info("Fetched {} records from table {}", allRecords.size(), tableName);
         log.info("Fetched {} records from table {}", allQuarterly_ResistanceSupportRecord.size(), "ResistanceSupport_Quarterly");
         log.info("Fetched {} records from table {}", allMonthly_ResistanceSupportRecord.size(), "ResistanceSupport_Monthly");
-        //log.info("Fetched {} records from table {}", allWeekly_ResistanceSupportRecord.size(), "ResistanceSupport_Weekly");
-        //log.info("Fetched {} records from table {}", allDaily_ResistanceSupportRecord.size(), "ResistanceSupport_Daily");
 
         // Prepare final list of DTOs
         List<ResistanceSupport> dtoList_Quarterly = new ArrayList<>();
-
-        // Create 3 DTO entries (Close, Low, High) for each quarterly record
         for (ResistenceSupportRecord record : allQuarterly_ResistanceSupportRecord) {
             extracted(record, dtoList_Quarterly, "Q");
         }
 
-        // Prepare final list of DTOs
         List<ResistanceSupport> dtoList_Monthly = new ArrayList<>();
-
-        // Create 3 DTO entries (Close, Low, High) for each quarterly record
         for (ResistenceSupportRecord record : allMonthly_ResistanceSupportRecord) {
             extracted(record, dtoList_Monthly, "M");
         }
 
+        // Combine both lists
+        List<ResistanceSupport> combinedList = new ArrayList<>();
+        combinedList.addAll(dtoList_Quarterly);
+        combinedList.addAll(dtoList_Monthly);
 
-        log.info("Total DTO entries created for Quarterly data: {}", dtoList_Quarterly.size());
-        log.info("Total DTO entries created for Monthly data: {}", dtoList_Monthly.size());
+        // ✅ Sort by ResistanceSupport ascending (use reversed() for descending)
+        dtoList_Quarterly = dtoList_Quarterly.stream()
+                .sorted(Comparator.comparing(ResistanceSupport::getResistanceSupport, Comparator.nullsLast(Double::compareTo)))
+                .collect(Collectors.toList());
+
+        dtoList_Monthly = dtoList_Monthly.stream()
+                .sorted(Comparator.comparing(ResistanceSupport::getResistanceSupport, Comparator.nullsLast(Double::compareTo)))
+                .collect(Collectors.toList());
+
+        // Sort the combined list by ResistanceSupport ascending (or descending with reversed())
+        combinedList = combinedList.stream()
+                .sorted(Comparator.comparing(ResistanceSupport::getResistanceSupport, Comparator.nullsLast(Double::compareTo)))
+                .collect(Collectors.toList());
+
+       // log.info("Sorted Quarterly DTO list by ResistanceSupport value");
+        //log.info("Sorted Monthly DTO list by ResistanceSupport value");
 
         // Optional: process Amibroker records
         for (AmibrokerGrafanaAlgoRecord record : allRecords) {
-            recordProcessor.ProcessRecord(record,
-                    dtoList_Quarterly,
-                    dtoList_Monthly);
+            recordProcessor.ProcessRecord(record, combinedList, dtoList_Quarterly, dtoList_Monthly);
         }
 
-        return allRecords; // Or return dtoList if you want to return the DTOs instead
+        return allRecords; // or return the DTOs instead if you prefer
     }
+
 
     private static void extracted(ResistenceSupportRecord record, List<ResistanceSupport> dtoList , String period) {
         // Common reusable calculations
@@ -89,7 +98,7 @@ public class MarketDBCrawler {
                 : null;
 
         Double spreadRatio = (record.getVsaSpreadMa() != null && record.getHigh() != null && record.getLow() != null)
-                ? ((record.getHigh() - record.getLow()) * 100 / record.getVsaSpreadMa())
+                ? ((record.getHigh() - record.getLow())/ record.getVsaSpreadMa())
                 : null;
 
         Double spreadPosition = (record.getHigh() != null && record.getLow() != null && record.getClose() != null)
@@ -104,7 +113,7 @@ public class MarketDBCrawler {
         dtoClose.setVolume_Ratio(volumeRatio);
         dtoClose.setSpread_Ratio(spreadRatio);
         dtoClose.setSpread_Position(spreadPosition);
-        dtoClose.setResistenceSupport_Comment(period + "Close@" + spreadPosition);
+        dtoClose.setResistenceSupport_Comment(period + "C-Date(" + String.format("%.0f", record.getCandleDate()) + "),Vol("+String.format("%.2f", volumeRatio)+ "), Spread(" + String.format("%.2f", spreadRatio) + "),C-Pos(" + String.format("%.0f", spreadPosition) + ")");
         dtoList.add(dtoClose);
 
         // 2️⃣ Low Entry
@@ -115,7 +124,7 @@ public class MarketDBCrawler {
         dtoLow.setVolume_Ratio(volumeRatio);
         dtoLow.setSpread_Ratio(spreadRatio);
         dtoLow.setSpread_Position(spreadPosition);
-        dtoLow.setResistenceSupport_Comment(period + "Low" + spreadPosition);
+        dtoLow.setResistenceSupport_Comment(period + "L-Date(" + String.format("%.0f", record.getCandleDate()) + "),Vol("+String.format("%.2f", volumeRatio)+ "), Spread(" + String.format("%.2f", spreadRatio) + "),C-Pos(" + String.format("%.0f", spreadPosition) + ")");
         dtoList.add(dtoLow);
 
         // 3️⃣ High Entry
@@ -126,7 +135,7 @@ public class MarketDBCrawler {
         dtoHigh.setVolume_Ratio(volumeRatio);
         dtoHigh.setSpread_Ratio(spreadRatio);
         dtoHigh.setSpread_Position(spreadPosition);
-        dtoHigh.setResistenceSupport_Comment(period + "High" + spreadPosition);
+        dtoHigh.setResistenceSupport_Comment(period + "H-Date(" + String.format("%.0f", record.getCandleDate()) + "),Vol("+String.format("%.2f", volumeRatio)+ "), Spread(" + String.format("%.2f", spreadRatio) + "),C-Pos(" + String.format("%.0f", spreadPosition) + ")");
         dtoList.add(dtoHigh);
     }
 }
