@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 //https://github.com/RuchiTanmay/nselib
 @Slf4j
 @RestController
-@RequestMapping("/db-crawler/v1/DailyCrawler")
-public class DbCrawlerControllerDaily {
+@RequestMapping("/db-crawler/v1/Daily200DayCrawler")
+public class DbCrawlerController200Daily {
         @Autowired
         MarketDBCrawler marketDBCrawler;
 
