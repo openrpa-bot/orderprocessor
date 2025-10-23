@@ -3,7 +3,7 @@ name: Build and Push Docker Image (Gradle)
 on:
   push:
     branches:
-      - master  # Trigger on master check-in
+      - [main, master]
 
 jobs:
   build:
