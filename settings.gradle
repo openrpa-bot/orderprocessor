@@ -2,4 +2,4 @@ rootProject.name = 'order-management-system'
 include 'temporalbase'
 include 'open_algo_communicator'
 include 'user_interface'
-
+include 'AmibrokerDBCrowler'
