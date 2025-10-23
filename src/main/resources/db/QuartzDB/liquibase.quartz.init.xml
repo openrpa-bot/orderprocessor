@@ -8,7 +8,8 @@
     <property name="table_prefix" value="QRTZ_"/>
 
     <property name="blob_type" value="BYTEA" dbms="postgresql"/>
-    <property name="blob_type" value="BLOB"/>
+    <property name="blob_type" value="BLOB" dbms="!postgresql"/>
+
 
     <changeSet id="quartz-init" author="quartz">
 

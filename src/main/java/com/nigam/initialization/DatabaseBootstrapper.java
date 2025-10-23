@@ -19,31 +19,35 @@ public class DatabaseBootstrapper implements ApplicationListener<ApplicationEnvi
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+
         log.debug("DatabaseBootstrapper triggered");
-        String dbName = event.getEnvironment().getProperty("database.name");
+
         String dbUrl = event.getEnvironment().getProperty("database.url");
-        String username = event.getEnvironment().getProperty("database.username");
-        String password = event.getEnvironment().getProperty("database.password");
+        if (dbUrl.startsWith("jdbc:postgresql")) {
+            String dbName = event.getEnvironment().getProperty("database.name");
+            String username = event.getEnvironment().getProperty("database.username");
+            String password = event.getEnvironment().getProperty("database.password");
 
 
-        if (!dbUrl.endsWith("/")) {
-            dbUrl = dbUrl + "/";
-        }
-        String adminUrl = dbUrl + "postgres";
+            if (!dbUrl.endsWith("/")) {
+                dbUrl = dbUrl + "/";
+            }
+            String adminUrl = dbUrl + "postgres?serverTimezone=Asia/Kolkata";
 
-        //String adminUrl = dbUrl.substring(0, dbUrl.lastIndexOf("/")) + "/postgres";
+            //String adminUrl = dbUrl.substring(0, dbUrl.lastIndexOf("/")) + "/postgres";
 
-        try (Connection conn = DriverManager.getConnection(adminUrl, username, password);
-             Statement stmt = conn.createStatement()) {
+            try (Connection conn = DriverManager.getConnection(adminUrl, username, password);
+                 Statement stmt = conn.createStatement()) {
 
-            stmt.executeUpdate("CREATE DATABASE \"" + dbName + "\"");
-            System.out.println("✅ Database created: " + dbName);
+                stmt.executeUpdate("CREATE DATABASE \"" + dbName + "\"");
+                System.out.println("✅ Database created: " + dbName);
 
-        } catch (Exception e) {
-            if (e.getMessage().contains("already exists")) {
-                System.out.println("ℹ️ Database already exists: " + dbName);
-            } else {
-                System.err.println("⚠️ Database check failed: " + e.getMessage());
+            } catch (Exception e) {
+                if (e.getMessage().contains("already exists")) {
+                    System.out.println("ℹ️ Database already exists: " + dbName);
+                } else {
+                    System.err.println("⚠️ Database check failed: " + e.getMessage());
+                }
             }
         }
     }
