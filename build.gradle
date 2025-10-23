@@ -88,7 +88,8 @@ subprojects {
         implementation "org.liquibase:liquibase-core:4.31.1"
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
         implementation 'org.hibernate.orm:hibernate-core:6.6.8.Final'
-        implementation "com.mysql:mysql-connector-j:$mySQL2Version"
+        //implementation "com.mysql:mysql-connector-j:$mySQL2Version"
+        implementation 'org.postgresql:postgresql'
         compileOnly "org.projectlombok:lombok:$lombokVersion"
         annotationProcessor "org.projectlombok:lombok:$lombokVersion"
         implementation 'com.google.code.gson:gson:2.8.9'
