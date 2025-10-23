@@ -29,21 +29,6 @@ public class DBCrawller_ResistenceSupport implements Serializable {
     @Column(name = "\"CurrentIndex\"", nullable = false)
     private Double currentIndex;
 
-    @Column(name = "\"Close\"")
-    private Double close;
-
-    @Column(name = "\"High\"")
-    private Double high;
-
-    @Column(name = "\"Low\"")
-    private Double low;
-
-    @Column(name = "\"Open\"")
-    private Double open;
-
-    @Column(name = "\"Volume\"")
-    private Long volume;
-
     @Column(name = "\"candle_Date\"")
     private Double candleDate;
 
@@ -100,4 +85,7 @@ public class DBCrawller_ResistenceSupport implements Serializable {
 
     @Column(name = "\"Support4\"")
     private Double support4;
+
+    @Column(name = "\"support_name_4\"")
+    private String supportName4;
 }
