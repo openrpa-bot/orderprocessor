@@ -30,30 +30,30 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
 
         List<ResistanceSupport> trendlineResistenceSupport = new ArrayList<ResistanceSupport>();
 
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Quarterly TL@" + record.getDataQuarterlyTrendline());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Monthly TL@" + record.getDataMonthlyTrendline());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Weekly TL@" + record.getDataWeeklyTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataQuarterlyTrendline() ,"Quarterly TL@" + record.getDataQuarterlyTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataMonthlyTrendline() ,"Monthly TL@" + record.getDataMonthlyTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataWeeklyTrendline() ,"Weekly TL@" + record.getDataWeeklyTrendline());
         getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Daily TL@" + record.getDataDailyTrendline());
 
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Quarterly Previous TL@" + record.getDataDailyPreviousTrendline());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Monthly Previous TL@" + record.getDataMonthlyPreviousTrendline());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Weekly Previous TL@" + record.getDataWeeklyPreviousTrendline());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Daily Previous TL@" + record.getDataDailyPreviousTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataQuarterlyPreviousTrendline() ,"Quarterly Previous TL@" + record.getDataQuarterlyPreviousTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataMonthlyPreviousTrendline() ,"Monthly Previous TL@" + record.getDataMonthlyPreviousTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataWeeklyPreviousTrendline() ,"Weekly Previous TL@" + record.getDataWeeklyPreviousTrendline());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyPreviousTrendline() ,"Daily Previous TL@" + record.getDataDailyPreviousTrendline());
 
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Quarterly TL OHCL@" + record.getDataQuarterlyTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Monthly TL OHCL@" + record.getDataMonthlyTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Weekly TL OHCL@" + record.getDataWeeklyTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Daily TL OHCL@" + record.getDataDailyTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,Double.valueOf(record.getDataQuarterlyTrendlineOhlc()) ,"Quarterly TL OHCL@" + record.getDataQuarterlyTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,Double.valueOf(record.getDataMonthlyTrendlineOhlc()) ,"Monthly TL OHCL@" + record.getDataMonthlyTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,Double.valueOf(record.getDataWeeklyTrendlineOhlc()) ,"Weekly TL OHCL@" + record.getDataWeeklyTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,Double.valueOf(record.getDataDailyTrendlineOhlc()) ,"Daily TL OHCL@" + record.getDataDailyTrendlineOhlc());
 
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Quarterly Previous TL OHCL@" + record.getDataQuarterlyPreviousTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Monthly Previous TL OHCL@" + record.getDataMonthlyPreviousTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Weekly Previous TL OHCL@" + record.getDataWeeklyPreviousTrendlineOhlc());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Daily Previous TL OHCL@" + record.getDataDailyPreviousTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataQuarterlyPreviousTrendlineOhlc() ,"Quarterly Previous TL OHCL@" + record.getDataQuarterlyPreviousTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataMonthlyPreviousTrendlineOhlc() ,"Monthly Previous TL OHCL@" + record.getDataMonthlyPreviousTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataWeeklyPreviousTrendlineOhlc() ,"Weekly Previous TL OHCL@" + record.getDataWeeklyPreviousTrendlineOhlc());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyPreviousTrendlineOhlc() ,"Daily Previous TL OHCL@" + record.getDataDailyPreviousTrendlineOhlc());
 
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Quarterly TL Middle@" + record.getDataQuarterlyTrendlineMiddle());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Monthly TL  Middle@" + record.getDataMonthlyTrendlineMiddle());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Weekly TL  Middle@" + record.getDataWeeklyTrendlineMiddle());
-        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendline() ,"Daily TL  Middle@" + record.getDataDailyTrendlineMiddle());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataQuarterlyTrendlineMiddle() ,"Quarterly TL Middle@" + record.getDataQuarterlyTrendlineMiddle());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataMonthlyTrendlineMiddle() ,"Monthly TL  Middle@" + record.getDataMonthlyTrendlineMiddle());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataWeeklyTrendlineMiddle() ,"Weekly TL  Middle@" + record.getDataWeeklyTrendlineMiddle());
+        getResistenceSupportList(record, trendlineResistenceSupport,record.getDataDailyTrendlineMiddle() ,"Daily TL  Middle@" + record.getDataDailyTrendlineMiddle());
 
         trendlineResistenceSupport.addAll(combinedList);
 
@@ -83,6 +83,7 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
         dbCrawller_ResistenceSupport.setCandleDateTime(record.getCandleDateTime());
         dbCrawller_ResistenceSupport.setTickerName(record.getTickerName());
         dbCrawller_ResistenceSupport.setCandleTime(record.getCandleTime());
+        dbCrawller_ResistenceSupport.setClose(record.getClose());
         if(closestResistence.size() > 0) {
             dbCrawller_ResistenceSupport.setResistence1(closestResistence.get(0).getResistanceSupport());
             dbCrawller_ResistenceSupport.setResistenceName1(closestResistence.get(0).getResistenceSupport_Comment());

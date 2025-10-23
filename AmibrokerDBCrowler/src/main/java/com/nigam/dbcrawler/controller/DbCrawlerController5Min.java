@@ -14,8 +14,8 @@ import static java.lang.Thread.sleep;
 //https://github.com/RuchiTanmay/nselib
 @Slf4j
 @RestController
-@RequestMapping("/db-crawler/v1/crawle")
-public class DbCrawlerController {
+@RequestMapping("/db-crawler/v1/Minute5Crawler")
+public class DbCrawlerController5Min {
         @Autowired
         MarketDBCrawler marketDBCrawler;
 

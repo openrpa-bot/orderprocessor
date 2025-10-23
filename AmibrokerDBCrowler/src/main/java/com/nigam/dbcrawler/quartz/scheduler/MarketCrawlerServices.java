@@ -48,7 +48,7 @@ public class MarketCrawlerServices implements JobListener {
                 .forJob(duringMarketJob)
                 .withIdentity("TRIGGER_DURING_MARKET", CRAWLER_JOB_GROUP)
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInMinutes(1)
+                        .withIntervalInMinutes(5)
                         .repeatForever())
                 .build();
 

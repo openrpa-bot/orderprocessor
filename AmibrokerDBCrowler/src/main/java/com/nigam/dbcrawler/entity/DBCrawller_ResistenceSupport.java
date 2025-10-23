@@ -41,6 +41,9 @@ public class DBCrawller_ResistenceSupport implements Serializable {
     @Column(name = "\"candle_Time\"")
     private Double candleTime;
 
+    @Column(name = "\"Close\"")
+    private Double close;
+
     @Column(name = "\"Resistence1\"")
     private Double resistence1;
 
