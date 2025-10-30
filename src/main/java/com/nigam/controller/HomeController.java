@@ -27,16 +27,19 @@ public class HomeController {
         @PostMapping
         public String receiveJson(@RequestBody String jsonPayload) {
             log.info("Received JSON payload: " + jsonPayload);
+            String serverIP = "192.168.1.112";
+            String serverPort = "5001";
+            String apiKey = "a79902ef310ad435a5ec8b9d46701dd8c164a4ae9aab107b0a7f66c1a91b8c12";
             // Process the JSON payload
             //CommonInputValue commonInputValue = new CommonInputValue( "false", "127.0.0.1", "5001", "2914287258181b553024e3251fdd67c9303b8448e03e4884d478f302e5827a90", "" );
-            CommonInputValue commonInputValue = new CommonInputValue( "false", "192.168.1.112", "5001", "6a930612cf22be9db2a69234ac190203e606097f71e35fb80decb23a3d559977", "", "" );
+            CommonInputValue commonInputValue = new CommonInputValue( "false", serverIP, serverPort, apiKey, "", "" );
             //AllHoldings allHoldings = new AllHoldings();
             try {
                 CommonOutputValue commonOutputValue_Intervals  = new OpenAlgoCommunicator_Intervals().postRequest(commonInputValue);
                 sleep(2000);
                 CommonOutputValue commonOutputValue_History  = new OpenAlgoCommunicator_History().postRequest(commonInputValue);
                 sleep(2000);
-                commonInputValue = new CommonInputValue( "false", "192.168.1.112", "5001", "6a930612cf22be9db2a69234ac190203e606097f71e35fb80decb23a3d559977", "others_AllOrderClearence", "" );
+               /* commonInputValue = new CommonInputValue( "false", serverIP, serverPort, apiKey, "" , "");
                 CommonOutputValue commonOutputValue_AnalyzerStatus  = new OpenAlgoCommunicator_AnalyzerStatus().postRequest(commonInputValue);
                 sleep(2000);
                 CommonOutputValue commonOutputValue_Funds           = new OpenAlgoCommunicator_Funds().postRequest(commonInputValue);
@@ -50,7 +53,7 @@ public class HomeController {
                 CommonOutputValue commonOutputValue_Ping = new OpenAlgoCommunicator_Ping().postRequest(commonInputValue);
                 sleep(2000);
                 CommonOutputValue commonOutputValue_TradeBook = new OpenAlgoCommunicator_TradeBook().postRequest(commonInputValue);
-
+*/
                /*  */
 
                 // Handle the response

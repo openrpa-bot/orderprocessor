@@ -15,7 +15,7 @@ public class OpenAlgoCommunicator_History implements OpenAlgoCommunicator {
     @Override
     public CommonOutputValue postRequest(@Valid CommonInputValue commonInputValue) throws Exception {
         String Additional_Payload = " ,\"symbol\": \"HSCL\"," +
-                "    \"exchange\": \"NFO\"," +
+                "    \"exchange\": \"NSE\"," +
                 "    \"interval\": \"D\"," +
                 "    \"start_date\": \"2025-10-10\"," +
                 "    \"end_date\": \"2025-10-21\"";

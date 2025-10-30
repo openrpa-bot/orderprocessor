@@ -12,8 +12,8 @@ import org.springframework.jms.annotation.EnableJms;
 
 
 import java.io.IOException;
-//http://localhost:8091
-//http://localhost:8091/swagger-ui/index.html
+//http://localhost:8092
+//http://localhost:8092/swagger-ui/index.html
 //https://github.com/RuchiTanmay/nselib
 @SpringBootApplication
 @EnableCaching
