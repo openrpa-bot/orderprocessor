@@ -5,5 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="QuartzDB/liquibase.quartz.init.xml" relativeToChangelogFile="true"/>
+    <!--include file="BrokerConfig/liquibase.brokerconfig.init.xml" relativeToChangelogFile="true"/-->
 
 </databaseChangeLog>
