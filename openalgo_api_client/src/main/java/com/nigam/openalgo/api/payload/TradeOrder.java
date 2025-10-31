@@ -1,9 +1,9 @@
 package com.nigam.openalgo.api.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Represents a trade order payload with selective JSON inclusion.
@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 public class TradeOrder {
 
     private final String apikey;
+    private final Boolean mode; // 👈 change type to Boolean
     private final String strategy;
     private final String symbol;
     private final String action;
@@ -27,6 +28,7 @@ public class TradeOrder {
 
     private TradeOrder(Builder builder) {
         this.apikey = builder.apikey;
+        this.mode = builder.mode;
         this.strategy = builder.strategy;
         this.symbol = builder.symbol;
         this.action = builder.action;
@@ -42,6 +44,7 @@ public class TradeOrder {
 
     public static class Builder {
         private String apikey;
+        private Boolean mode; // 👈 internal representation as Boolean
         private String strategy;
         private String symbol;
         private String action;
@@ -55,6 +58,16 @@ public class TradeOrder {
         private String trigger_price;
 
         public Builder apikey(String apikey) { this.apikey = apikey; return this; }
+
+        // 👇 mode logic — only sets if not null
+        public Builder mode(String mode) {
+            if (mode != null) {
+                if (mode.equalsIgnoreCase("true")) this.mode = true;
+                else if (mode.equalsIgnoreCase("false")) this.mode = false;
+            }
+            return this;
+        }
+
         public Builder strategy(String strategy) { this.strategy = strategy; return this; }
         public Builder symbol(String symbol) { this.symbol = symbol; return this; }
         public Builder action(String action) { this.action = action; return this; }
@@ -73,16 +86,14 @@ public class TradeOrder {
     }
 
     // ✅ Convert to JSON string — only non-null fields will be serialized
-
     public String toJson() {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY); // 👈 important
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (Exception e) {
             throw new RuntimeException("Failed to convert TradeOrder to JSON", e);
         }
     }
-
 }
