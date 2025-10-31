@@ -23,6 +23,7 @@ dependencies {
     //implementation project(':temporalbase')
     implementation project(':open_algo_communicator')
     implementation project(':AmibrokerDBCrowler')
+    implementation project(':databasecontroller')
     implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
