@@ -2,7 +2,6 @@ package com.nigam.openalgo.api.account_api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.nigam.openalgo.api.communicator.APICallers;
-
 import com.nigam.openalgo.api.payload.TradeOrder;
 import com.nigam.openalgo.api.urlcreator.URLCreator;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +11,8 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-public class Ping {
-    String API_ENDPOINT = "api/v1/ping";
+public class Funds {
+    String API_ENDPOINT = "api/v1/funds";
     public JsonNode sendQuery(String serverIP, String serverPort, String apiKey) throws IOException {
         log.trace("Ping sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
 
