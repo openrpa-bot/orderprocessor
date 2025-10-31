@@ -2,6 +2,8 @@ package com.nigam.openalgo.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 
 /**
  * Represents a trade order payload with selective JSON inclusion.
@@ -71,13 +73,16 @@ public class TradeOrder {
     }
 
     // ✅ Convert to JSON string — only non-null fields will be serialized
+
     public String toJson() {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY); // 👈 important
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (Exception e) {
             throw new RuntimeException("Failed to convert TradeOrder to JSON", e);
         }
     }
+
 }
