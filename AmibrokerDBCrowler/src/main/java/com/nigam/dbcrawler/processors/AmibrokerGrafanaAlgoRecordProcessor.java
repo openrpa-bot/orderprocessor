@@ -117,7 +117,8 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
             dbCrawller_ResistenceSupport.setSupportName4(closestSupport.get(3).getResistenceSupport_Comment());
         }
 
-        dbCrawllerRepository.save(dbCrawller_ResistenceSupport);
+        //dbCrawllerRepository.save(dbCrawller_ResistenceSupport);
+        dbCrawllerRepository.upsert(dbCrawller_ResistenceSupport);
     }
 
     private void getResistenceSupportList(AmibrokerGrafanaAlgoRecord record, List<ResistanceSupport> trendlineResistenceSupport, Double resestanceSupport, String comment) {
