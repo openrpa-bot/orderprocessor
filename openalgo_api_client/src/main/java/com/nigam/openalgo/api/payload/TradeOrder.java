@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.swing.plaf.PanelUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class TradeOrder {
     private final Integer strike_int;
     private final String offset;
     private final String option_type;
+    private final String splitsize;
 
     // ✅ Multi-order support
     private final List<Order> orders;
@@ -60,6 +62,7 @@ public class TradeOrder {
         this.offset = builder.offset;
         this.option_type = builder.option_type;
         this.orders = builder.orders.isEmpty() ? null : builder.orders;
+        this.splitsize = builder.splitsize;
     }
 
     /** Represents an order in the 'orders' array */
@@ -80,6 +83,7 @@ public class TradeOrder {
         private final Integer strike_int;
         private final String offset;
         private final String option_type;
+        private final String splitsize;
 
         private Order(OrderBuilder builder) {
             this.symbol = builder.symbol;
@@ -97,6 +101,7 @@ public class TradeOrder {
             this.strike_int = builder.strike_int;
             this.offset = builder.offset;
             this.option_type = builder.option_type;
+            this.splitsize = builder.splitsize;
         }
 
         public static class OrderBuilder {
@@ -115,6 +120,7 @@ public class TradeOrder {
             private Integer strike_int;
             private String offset;
             private String option_type;
+            private String splitsize;
 
             public OrderBuilder symbol(String symbol) { this.symbol = symbol; return this; }
             public OrderBuilder exchange(String exchange) { this.exchange = exchange; return this; }
@@ -130,6 +136,7 @@ public class TradeOrder {
             public OrderBuilder underlying(String underlying) { this.underlying = underlying; return this; }
             public OrderBuilder offset(String offset) { this.offset = offset; return this; }
             public OrderBuilder option_type(String option_type) { this.option_type = option_type; return this; }
+            public OrderBuilder splitsize(String splitsize) { this.splitsize = splitsize; return this; }
 
             public OrderBuilder strike_int(String strike_int) {
                 if (strike_int != null) this.strike_int = Integer.parseInt(strike_int);
@@ -160,6 +167,7 @@ public class TradeOrder {
         private Integer strike_int;
         private String offset;
         private String option_type;
+        private String splitsize;
 
         private final List<Order> orders = new ArrayList<>();
 
@@ -186,6 +194,7 @@ public class TradeOrder {
         public Builder product(String product) { this.product = product; return this; }
         public Builder pricetype(String pricetype) { this.pricetype = pricetype; return this; }
         public Builder price(String price) { this.price = price; return this; }
+        public Builder splitsize(String splitsize) { this.splitsize = splitsize; return this; }
 
         // ✅ Accepts either string or integer quantity
         public Builder quantity(Object quantity) {
