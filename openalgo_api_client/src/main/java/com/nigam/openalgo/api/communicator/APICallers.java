@@ -10,40 +10,64 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class APICallers {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * Makes a POST API call with a JSON payload and returns the response as a JsonNode.
+     */
     public static JsonNode CallAPI(String strUrl, String payload) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // Setup HTTP connection
-        System.out.println("API URL: " + strUrl.toString());
-        System.out.println("API payload: " + payload.toString());
+        System.out.println("API URL (POST): " + strUrl);
+        System.out.println("API Payload: " + payload);
+
         URL url = new URL(strUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
-        // Send Request
+        // Send payload
         try (var outputStream = connection.getOutputStream()) {
-            outputStream.write(payload.getBytes());
+            outputStream.write(payload.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
 
-        // Handle Response
-        int statusCode = connection.getResponseCode();
-        if (statusCode == 200) {
-            try (var inputStream = connection.getInputStream()) {
-                // Inspect the response structure and use appropriate mapping
-                JsonNode jsonNode = objectMapper.readTree(inputStream); // Generic JSON tree
-                System.out.println("API Response: " + jsonNode.toString());
-                return jsonNode;
+        return handleResponse(connection);
+    }
 
+    /**
+     * Makes a GET API call (no payload) and returns the response as a JsonNode.
+     */
+    public static JsonNode GetAPI(String strUrl) throws IOException {
+        System.out.println("API URL (GET): " + strUrl);
+
+        URL url = new URL(strUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Accept", "application/json");
+
+        return handleResponse(connection);
+    }
+
+    /**
+     * Common method for handling response from both POST and GET requests.
+     */
+    private static JsonNode handleResponse(HttpURLConnection connection) throws IOException {
+        int statusCode = connection.getResponseCode();
+
+        if (statusCode >= 200 && statusCode < 300) {
+            // ✅ Success
+            try (var inputStream = connection.getInputStream()) {
+                JsonNode jsonNode = objectMapper.readTree(inputStream);
+                System.out.println("API Response: " + jsonNode.toPrettyString());
+                return jsonNode;
             } catch (JsonProcessingException e) {
-                // Handle JSON parsing errors
                 throw new IOException("Failed to parse API response JSON", e);
             }
         } else {
-            // Enhanced error handling for non-200 status code
+            // ❌ Error response
             try (var errorStream = connection.getErrorStream()) {
-                String errorResponse = errorStream != null
+                String errorResponse = (errorStream != null)
                         ? new String(errorStream.readAllBytes(), StandardCharsets.UTF_8)
                         : "No response body";
 

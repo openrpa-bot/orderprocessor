@@ -38,6 +38,13 @@ public class TradeOrder {
     private final String offset;
     private final String option_type;
     private final String splitsize;
+    private final String interval;
+    private final String start_date;
+    private final String end_date;
+    private final String instrumenttype;
+    private final String expiry_date;
+    private final String query;
+
 
     // ✅ Multi-order support
     private final List<Order> orders;
@@ -63,6 +70,13 @@ public class TradeOrder {
         this.option_type = builder.option_type;
         this.orders = builder.orders.isEmpty() ? null : builder.orders;
         this.splitsize = builder.splitsize;
+        this.interval = builder.interval;
+        this.start_date = builder.start_date;
+        this.end_date = builder.end_date;
+        this.instrumenttype = builder.instrumenttype;
+        this.expiry_date = builder.expiry_date;
+        this.query = builder.query;
+
     }
 
     /** Represents an order in the 'orders' array */
@@ -84,6 +98,13 @@ public class TradeOrder {
         private final String offset;
         private final String option_type;
         private final String splitsize;
+        private final String interval;
+        private final String start_date;
+        private final String end_date;
+        private final String instrumenttype;
+        private final String expiry_date;
+        private final String query;
+
 
         private Order(OrderBuilder builder) {
             this.symbol = builder.symbol;
@@ -102,6 +123,12 @@ public class TradeOrder {
             this.offset = builder.offset;
             this.option_type = builder.option_type;
             this.splitsize = builder.splitsize;
+            this.interval = builder.interval;
+            this.start_date = builder.start_date;
+            this.end_date = builder.end_date;
+            this.instrumenttype = builder.instrumenttype;
+            this.expiry_date = builder.expiry_date;
+            this.query = builder.query;
         }
 
         public static class OrderBuilder {
@@ -121,6 +148,12 @@ public class TradeOrder {
             private String offset;
             private String option_type;
             private String splitsize;
+            private String interval;
+            private String start_date;
+            private String end_date;
+            private String instrumenttype;
+            private String expiry_date;
+            private String query;
 
             public OrderBuilder symbol(String symbol) { this.symbol = symbol; return this; }
             public OrderBuilder exchange(String exchange) { this.exchange = exchange; return this; }
@@ -137,6 +170,12 @@ public class TradeOrder {
             public OrderBuilder offset(String offset) { this.offset = offset; return this; }
             public OrderBuilder option_type(String option_type) { this.option_type = option_type; return this; }
             public OrderBuilder splitsize(String splitsize) { this.splitsize = splitsize; return this; }
+            public OrderBuilder interval(String interval) { this.interval = interval; return this; }
+            public OrderBuilder start_date(String start_date) { this.start_date = start_date; return this; }
+            public OrderBuilder end_date(String end_date) { this.end_date = end_date; return this; }
+            public OrderBuilder instrumenttype(String instrumenttype) { this.instrumenttype = instrumenttype; return this; }
+            public OrderBuilder expiry_date(String expiry_date) { this.expiry_date = expiry_date; return this; }
+            public OrderBuilder query(String query) { this.query = query; return this; }
 
             public OrderBuilder strike_int(String strike_int) {
                 if (strike_int != null) this.strike_int = Integer.parseInt(strike_int);
@@ -168,6 +207,12 @@ public class TradeOrder {
         private String offset;
         private String option_type;
         private String splitsize;
+        private String interval;
+        private String start_date;
+        private String end_date;
+        private String instrumenttype;
+        private String expiry_date;
+        private String query;
 
         private final List<Order> orders = new ArrayList<>();
 
@@ -195,6 +240,10 @@ public class TradeOrder {
         public Builder pricetype(String pricetype) { this.pricetype = pricetype; return this; }
         public Builder price(String price) { this.price = price; return this; }
         public Builder splitsize(String splitsize) { this.splitsize = splitsize; return this; }
+        public Builder interval(String interval) { this.interval = interval; return this; }
+        public Builder start_date(String start_date) { this.start_date = start_date; return this; }
+        public Builder end_date(String end_date) { this.end_date = end_date; return this; }
+
 
         // ✅ Accepts either string or integer quantity
         public Builder quantity(Object quantity) {
@@ -208,6 +257,9 @@ public class TradeOrder {
         public Builder underlying(String underlying) { this.underlying = underlying; return this; }
         public Builder offset(String offset) { this.offset = offset; return this; }
         public Builder option_type(String option_type) { this.option_type = option_type; return this; }
+        public Builder instrumenttype(String instrumenttype) { this.instrumenttype = instrumenttype; return this; }
+        public Builder expiry_date(String expiry_date) { this.expiry_date = expiry_date; return this; }
+        public Builder query(String query) { this.query = query; return this; }
 
         public Builder addOrder(Order order) {
             if (order != null) this.orders.add(order);
