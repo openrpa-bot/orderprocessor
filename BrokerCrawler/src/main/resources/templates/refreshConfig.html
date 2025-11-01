@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OpenAlgo Configuration</title>
+</head>
+<body>
+
+<div th:replace="fragments/menu :: menu"></div>
+
+<h2>Configuration Settings</h2>
+
+<form th:action="@{/refreshConfig/update}" th:object="${config}" method="post">
+
+    <label>Server Name:</label>
+    <input type="text" th:field="*{server}" /><br><br>
+
+    <label>IP Address:</label>
+    <input type="text" th:field="*{ip}" /><br><br>
+
+    <label>Port:</label>
+    <input type="text" th:field="*{port}" /><br><br>
+
+    <label>API Key:</label>
+    <input type="text" th:field="*{apiKey}" /><br><br>
+
+    <button type="submit">💾 Save Configuration</button>
+</form>
+
+</body>
+</html>

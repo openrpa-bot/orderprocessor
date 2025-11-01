@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -16,6 +17,9 @@ import java.util.Optional;
 public class AppConfigService {
 
     private final AppConfigRepository repository;
+
+    // Keep the currently active configuration in memory
+    private AppConfig activeConfig;
 
     @Value("${openalgo.broker.default.server.name}")
     private String defaultServerName;
@@ -28,6 +32,32 @@ public class AppConfigService {
 
     @Value("${openalgo.broker.default.server.apiKey}")
     private String defaultApiKey;
+
+    /**
+     * Returns the currently active configuration.
+     * If not cached, loads it from DB or default properties.
+     */
+    public AppConfig getActiveConfig() {
+        if (activeConfig == null) {
+            activeConfig = loadActiveConfig();
+        }
+        return activeConfig;
+    }
+
+    public AppConfig refreshAndGetActive() {
+        AppConfig config = loadActiveConfig(); // Load from DB or default
+        config.setLastRefreshed(LocalDateTime.now());
+        repository.save(config);
+        return config;
+    }
+
+
+    /**
+     * Updates the in-memory active config.
+     */
+    public void updateActiveConfig(AppConfig newConfig) {
+        this.activeConfig = repository.save(newConfig);
+    }
 
     /**
      * Loads active configuration:
@@ -56,9 +86,9 @@ public class AppConfigService {
     }
 
     /**
-     * Refresh the configuration:
-     *  - If same IP exists, update
-     *  - Else create new
+     * Refresh configuration:
+     *  - If same IP exists, update its details
+     *  - Otherwise create new entry
      *  - Enable and set as default
      *  - Disable others
      */
@@ -66,10 +96,8 @@ public class AppConfigService {
     public AppConfig refreshConfig(String server, String ip, String port, String apiKey) {
         log.info("Refreshing configuration for server: {}", server);
 
-        // Disable all other configs
         repository.clearDefaultFlags();
 
-        // Find existing config by IP
         Optional<AppConfig> existing = repository.findByIp(ip);
         AppConfig config;
 
@@ -90,8 +118,14 @@ public class AppConfigService {
             config.setIsDefault(true);
         }
 
+        // 👇 Add this line here
+        config.setLastRefreshed(LocalDateTime.now());
+
         repository.save(config);
+        activeConfig = config;
+
         log.info("Refreshed configuration saved and set as default: {}", config.getServer());
         return config;
     }
+
 }

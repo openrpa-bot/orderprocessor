@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head></head>
 <body>
-<div th:fragment="header">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h2>Holdings</h2>
+<div th:fragment="header(config)">
+    <div style="background-color:#1e1e2f; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <b>OpenAlgo Holdings Dashboard</b>
+            <span style="margin-left:15px;">
+                Connected to: <span th:text="${config != null ? config.ip : 'Unknown'}"></span> :
+                <span th:text="${config != null ? config.port : '-'}"></span>
+            </span>
+        </div>
 
-        <form th:action="@{/refreshConfig}" method="post" style="display:flex; gap:10px; align-items:center;">
-            <input type="text" name="server" placeholder="Server Name" th:value="${config.serverName}" required>
-            <input type="text" name="ip" placeholder="Server IP" th:value="${config.serverIp}" required>
-            <input type="text" name="port" placeholder="Port" th:value="${config.serverPort}" required>
-            <input type="text" name="apiKey" placeholder="API Key" th:value="${config.apiKey}" required size="50">
-
-            <button type="submit">🔄 Refresh</button>
-        </form>
+        <div>
+            <form th:action="@{/holdings}" method="get" style="display:inline;">
+                <button type="submit" style="background-color:#3b82f6; border:none; color:white; padding:6px 12px; border-radius:5px; cursor:pointer;">
+                    🔄 Refresh
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

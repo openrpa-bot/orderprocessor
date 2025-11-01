@@ -2,6 +2,7 @@ package com.nigam.brokercrawler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "om_app_config")
@@ -17,4 +18,7 @@ public class AppConfig {
     private String port;
     private Boolean isEnabled;
     private Boolean isDefault;
+
+    @Column(name = "last_refreshed")
+    private LocalDateTime lastRefreshed;
 }

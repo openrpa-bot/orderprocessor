@@ -27,33 +27,22 @@ public class HoldingsController {
         this.configService = configService;
     }
 
-    @GetMapping({"/holdings"})
+    @GetMapping("/holdings")
     public String showHoldings(Model model) {
         try {
-            // Load configuration (from DB or default)
-            AppConfig config = configService.loadActiveConfig();
+            // Load (and persist) configuration
+            AppConfig config = configService.refreshAndGetActive();
 
-            // Fetch holdings JSON
+            // Fetch holdings
             JsonNode jsonNode = openalgoQueryExecutor.sendQuery(
-                    config.getIp(),
-                    config.getPort(),
-                    config.getApiKey()
-            );
+                    config.getIp(), config.getPort(), config.getApiKey());
 
             ObjectMapper mapper = new ObjectMapper();
-            // Navigate to data.holdings inside JSON
             JsonNode holdingsNode = jsonNode.path("data").path("holdings");
+            List<Map<String, Object>> holdings = mapper.convertValue(holdingsNode, List.class);
 
-            // Convert JsonNode array → Java List of Maps
-            List<Map<String, Object>> holdings =
-                    mapper.convertValue(holdingsNode, List.class);
-
-            // Add to model
             model.addAttribute("holdings", holdings);
-
-            // Also add config details
             model.addAttribute("config", config);
-
             return "holdings";
 
         } catch (Exception e) {
@@ -62,4 +51,5 @@ public class HoldingsController {
             return "error";
         }
     }
+
 }
