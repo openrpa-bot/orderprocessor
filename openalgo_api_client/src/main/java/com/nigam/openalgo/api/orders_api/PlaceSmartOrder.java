@@ -14,6 +14,18 @@ import java.io.IOException;
 public class PlaceSmartOrder {
     String API_ENDPOINT = "api/v1/placesmartorder";
 
+    public JsonNode sendQuery(String serverIP, String serverPort, TradeOrder tradeOrder) throws IOException {
+        log.trace("PlaceSmartOrder sent to server " + serverIP + " on port " + serverPort );
+
+        String url = URLCreator.createURL("false", serverIP, serverPort, API_ENDPOINT);
+        log.trace("PlaceSmartOrder Request Url :" + url);
+
+        String jsonRequest =  tradeOrder.toJson();
+        log.trace("PlaceSmartOrder Request Payload :\n\r" + jsonRequest);
+
+        return APICallers.CallAPI(url, jsonRequest) ;
+    }
+
     public JsonNode sendQuery(String serverIP,
                               String serverPort,
                               String apiKey,
@@ -29,12 +41,9 @@ public class PlaceSmartOrder {
                               String trigger_price,
                               String disclosed_quantity
                         ) throws IOException {
-        log.trace("Ping sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
+        log.trace("PlaceSmartOrder sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
 
-        String url = URLCreator.createURL("false", serverIP, serverPort, API_ENDPOINT);
-        log.trace("Request Url :" + url);
-
-        TradeOrder partialOrder = new TradeOrder.Builder()
+        TradeOrder tradeOrder = new TradeOrder.Builder()
                 .apikey(apiKey)
                 .strategy(strategy)
                 .symbol(symbol)
@@ -48,8 +57,7 @@ public class PlaceSmartOrder {
                 .trigger_price(trigger_price)
                 .disclosed_quantity(disclosed_quantity)
                 .build();
-        String jsonRequest =  partialOrder.toJson();
-        log.trace("Request Payload :" + jsonRequest);
-        return APICallers.CallAPI(url, jsonRequest) ;
+
+        return sendQuery(serverIP, serverPort, tradeOrder) ;
     }
 }

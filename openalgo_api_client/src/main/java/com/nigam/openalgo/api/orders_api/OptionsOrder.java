@@ -14,6 +14,18 @@ import java.io.IOException;
 public class OptionsOrder {
     String API_ENDPOINT = "api/v1/optionsorder";
 
+    public JsonNode sendQuery(String serverIP, String serverPort, TradeOrder tradeOrder) throws IOException {
+        log.trace("OptionsOrder sent to server " + serverIP + " on port " + serverPort );
+
+        String url = URLCreator.createURL("false", serverIP, serverPort, API_ENDPOINT);
+        log.trace("OptionsOrder Request Url :" + url);
+
+        String jsonRequest =  tradeOrder.toJson();
+        log.trace("OptionsOrder Request Payload :\n\r" + jsonRequest);
+
+        return APICallers.CallAPI(url, jsonRequest) ;
+    }
+
     public JsonNode sendQuery(String serverIP,
                               String serverPort,
                               String apiKey,
@@ -27,13 +39,10 @@ public class OptionsOrder {
                               String strike_int,
                               String offset,
                               String option_type
-                        ) throws IOException {
-        log.trace("Ping sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
+    ) throws IOException {
+        log.trace("OptionsOrder sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
 
-        String url = URLCreator.createURL("false", serverIP, serverPort, API_ENDPOINT);
-        log.trace("Request Url :" + url);
-
-        TradeOrder partialOrder = new TradeOrder.Builder()
+        TradeOrder tradeOrder = new TradeOrder.Builder()
                 .apikey(apiKey)
                 .strategy(strategy)
                 .underlying(underlying)
@@ -46,8 +55,7 @@ public class OptionsOrder {
                 .offset(offset)
                 .option_type(option_type)
                 .build();
-        String jsonRequest =  partialOrder.toJson();
-        log.trace("Request Payload :" + jsonRequest);
-        return APICallers.CallAPI(url, jsonRequest) ;
+
+        return sendQuery(serverIP, serverPort, tradeOrder) ;
     }
 }

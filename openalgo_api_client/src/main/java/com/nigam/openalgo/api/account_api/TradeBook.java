@@ -13,17 +13,27 @@ import java.io.IOException;
 @Service
 public class TradeBook {
     String API_ENDPOINT = "api/v1/tradebook";
-    public JsonNode sendQuery(String serverIP, String serverPort, String apiKey) throws IOException {
-        log.trace("Ping sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
+
+    public JsonNode sendQuery(String serverIP, String serverPort, TradeOrder tradeOrder) throws IOException {
+        log.trace("TradeBook sent to server " + serverIP + " on port " + serverPort );
 
         String url = URLCreator.createURL("false", serverIP, serverPort, API_ENDPOINT);
-        log.trace("Request Url :" + url);
+        log.trace("TradeBook Request Url :" + url);
 
-        TradeOrder partialOrder = new TradeOrder.Builder()
-                .apikey(apiKey)
-                .build();
-        String jsonRequest =  partialOrder.toJson();
-        log.trace("Request Payload :" + jsonRequest);
+        String jsonRequest =  tradeOrder.toJson();
+        log.trace("TradeBook Request Payload :\n\r" + jsonRequest);
+
         return APICallers.CallAPI(url, jsonRequest) ;
     }
+
+    public JsonNode sendQuery(String serverIP, String serverPort, String apiKey) throws IOException {
+        log.trace("TradeBook sent to server " + serverIP + " on port " + serverPort + " with API key " + apiKey);
+
+        TradeOrder tradeOrder = new TradeOrder.Builder()
+                .apikey(apiKey)
+                .build();
+
+        return sendQuery(serverIP, serverPort, tradeOrder) ;
+    }
+
 }
