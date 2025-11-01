@@ -1,38 +1,89 @@
 package com.nigam.brokercrawler.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nigam.brokercrawler.entity.AppConfig;
+
 import com.nigam.openalgo.api.account_api.Holdings;
+import com.nigam.openalgo.api.dto.HoldingItem;
+import com.nigam.openalgo.api.orders_api.PlaceOrder;
+import com.nigam.openalgo.api.payload.TradeOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
-public class AllHoldings {
+public class HoldingServices {
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    Holdings holdings;
+    private PlaceOrder placeOrder;
 
-    public String Sell(String serverIP, String serverPort, String apikey) throws IOException {
-        String retVal = "";
-        return retVal ;
-    }
+    /**
+     * Iterates over all holdings and sells those whose symbols match the given list.
+     */
+    public String Sell(AppConfig config, Holdings holdings, List<String> symbols, String strategy) throws IOException {
+        StringBuilder retVal = new StringBuilder();
 
-    public String Get(String serverIP, String serverPort, String apikey) throws IOException {
-        String retVal = "";
+        // Fetch holdings data
+        JsonNode jsonNode = holdings.sendQuery(config.getIp(), config.getPort(), config.getApiKey());
+        JsonNode holdingsNode = jsonNode.path("data").path("holdings");
 
-        try {
-            retVal = objectMapper.writeValueAsString(holdings.sendQuery(serverIP, serverPort, apikey));
-        } catch (Exception e) {
-            // Handle or log the exception
-            System.err.println("An error occurred while processing: " + e.getMessage());
-            e.printStackTrace();
+        if (holdingsNode.isMissingNode() || !holdingsNode.isArray()) {
+            log.warn("Holdings data not found or invalid format.");
+            return "No holdings found to process.";
         }
-        return retVal ;
+
+        List<String> soldSymbols = new ArrayList<>();
+        List<String> skippedSymbols = new ArrayList<>();
+
+        // Deserialize and iterate through each holding
+        for (JsonNode node : holdingsNode) {
+            try {
+                HoldingItem holdingItem = objectMapper.treeToValue(node, HoldingItem.class);
+                String symbol = holdingItem.getSymbol();
+
+                if (symbols.contains(symbol)) {
+                    log.info("Attempting to sell: {} (Qty: {})", symbol, holdingItem.getQuantity());
+                    String action = "SELL";
+                    if (holdingItem.getQuantity()<0){
+                        action = "BUY";
+                    }
+                    TradeOrder tradeOrder = new TradeOrder.Builder()
+                            .apikey(config.getApiKey())
+                            .strategy(strategy)
+                            .symbol(symbol)
+                            .action(action)
+                            .exchange(holdingItem.getExchange())
+                            .pricetype("MARKET")
+                            .product(holdingItem.getProduct())
+                            .quantity(String.format("%.0f", holdingItem.getQuantity()))
+                            .build();
+
+                    JsonNode response = placeOrder.sendQuery(config.getIp(), config.getPort(), tradeOrder);
+
+
+                    log.info("Sell response for {}: {}", symbol, response);
+                    soldSymbols.add(symbol);
+                } else {
+                    skippedSymbols.add(symbol);
+                }
+
+            } catch (Exception e) {
+                log.error("Error processing holding entry: {}", e.getMessage());
+            }
+        }
+
+        retVal.append("✅ Sold symbols: ").append(soldSymbols).append("\n");
+        retVal.append("⏸️ Skipped symbols: ").append(skippedSymbols);
+
+        return retVal.toString();
     }
 }
