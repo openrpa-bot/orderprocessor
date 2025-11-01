@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="header">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2>Holdings</h2>
+
+        <form th:action="@{/refreshConfig}" method="post" style="display:flex; gap:10px; align-items:center;">
+            <input type="text" name="server" placeholder="Server Name" th:value="${config.serverName}" required>
+            <input type="text" name="ip" placeholder="Server IP" th:value="${config.serverIp}" required>
+            <input type="text" name="port" placeholder="Port" th:value="${config.serverPort}" required>
+            <input type="text" name="apiKey" placeholder="API Key" th:value="${config.apiKey}" required size="50">
+
+            <button type="submit">🔄 Refresh</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

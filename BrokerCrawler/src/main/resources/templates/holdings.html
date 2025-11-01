@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Holdings</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+<h2>All Holdings</h2>
+
+<div th:if="${error}" style="color:red;">
+    <p th:text="${error}"></p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Symbol</th>
+        <th>Exchange</th>
+        <th>Quantity</th>
+        <th>Average Price</th>
+        <th>PNL</th>
+        <th>PNL %</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="holding : ${holdings}">
+        <td th:text="${holding.symbol}"></td>
+        <td th:text="${holding.exchange}"></td>
+        <td th:text="${holding.quantity}"></td>
+        <td th:text="${holding.average_price}"></td>
+        <td th:text="${holding.pnl}"></td>
+        <td th:text="${holding.pnlpercent}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

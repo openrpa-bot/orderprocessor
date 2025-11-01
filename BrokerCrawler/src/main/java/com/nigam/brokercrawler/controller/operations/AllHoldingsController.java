@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/AllOrders")
+@RequestMapping("/api/v1/AllHoldings")
 public class AllHoldingsController {
 
     @Autowired
