@@ -8,11 +8,14 @@ import com.nigam.brokercrawler.services.HoldingServices;
 import com.nigam.openalgo.api.account_api.Holdings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.servlet.http.HttpSession;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +29,9 @@ public class HoldingsController {
 
     private final HoldingServices holdingServices;
 
+    @Value("${openalgo.broker.default.strategy}")
+    private String strategy;
+
     @Autowired
     Holdings openalgoQueryExecutor;
 
@@ -35,12 +41,28 @@ public class HoldingsController {
     }
 
     @GetMapping("/holdings")
-    public String showHoldings(Model model) {
+    public String showHoldings(@RequestParam(required = false) String strategy,
+                               Model model,
+                               HttpSession session) {
         try {
-            // Load (and persist) configuration
-            AppConfig config = configService.refreshAndGetActive();
+            // Step 1: manage session strategy
+            if (strategy != null && !strategy.isEmpty()) {
+                // store new value
+                session.setAttribute("strategy", strategy);
+            } else {
+                // fallback to session if not in URL
+                Object saved = session.getAttribute("strategy");
+                if (saved != null) {
+                    strategy = saved.toString();
+                } else {
+                    // default strategy if none
+                    strategy = "default";
+                    session.setAttribute("strategy", strategy);
+                }
+            }
 
-            // Fetch holdings
+            // Step 2: load config and holdings
+            AppConfig config = configService.refreshAndGetActive();
             JsonNode jsonNode = openalgoQueryExecutor.sendQuery(
                     config.getIp(), config.getPort(), config.getApiKey());
 
@@ -50,6 +72,8 @@ public class HoldingsController {
 
             model.addAttribute("holdings", holdings);
             model.addAttribute("config", config);
+            model.addAttribute("strategy", strategy);
+
             return "holdings";
 
         } catch (Exception e) {
@@ -58,15 +82,17 @@ public class HoldingsController {
             return "error";
         }
     }
+
+
     @PostMapping("/holdings/sellAll")
-    public String sellSelectedHoldings(@RequestParam(value = "symbols", required = false) List<String> symbols,
+    public String sellSelectedHoldings(@RequestParam(value = "symbols", required = false) List<String> symbols, @RequestParam String strategy,
                                        Model model) throws IOException {
         if (symbols == null || symbols.isEmpty()) {
             model.addAttribute("message", "⚠️ No holdings selected for selling.");
             return "redirect:/holdings";
         }
         AppConfig config = configService.refreshAndGetActive();
-        holdingServices.Sell(config, openalgoQueryExecutor, symbols, "Stretigy");  // delegate to service
+        holdingServices.Sell(config, openalgoQueryExecutor, symbols, strategy);  // delegate to service
         model.addAttribute("message", "✅ Selected holdings sold successfully.");
 
         return "redirect:/holdings";

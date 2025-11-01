@@ -3,17 +3,22 @@
 <body>
 <div th:fragment="header(config)">
     <div style="background-color:#1e1e2f; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
+
+        <!-- Left section: title + connection info -->
         <div>
             <b>OpenAlgo Holdings Dashboard</b>
             <span style="margin-left:15px;">
-                Connected to: <span th:text="${config != null ? config.ip : 'Unknown'}"></span> :
+                Connected to:
+                <span th:text="${config != null ? config.ip : 'Unknown'}"></span> :
                 <span th:text="${config != null ? config.port : '-'}"></span>
             </span>
         </div>
 
+        <!-- Right section: refresh button with preserved strategy -->
         <div>
-            <form th:action="@{/holdings}" method="get" style="display:inline;">
-                <button type="submit" style="background-color:#3b82f6; border:none; color:white; padding:6px 12px; border-radius:5px; cursor:pointer;">
+            <form th:action="@{|/holdings?strategy=${session.strategy}|}" method="get" style="display:inline;">
+                <button type="submit"
+                        style="background-color:#3b82f6; border:none; color:white; padding:6px 12px; border-radius:5px; cursor:pointer;">
                     🔄 Refresh
                 </button>
             </form>

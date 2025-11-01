@@ -6,8 +6,15 @@
 <!-- Define fragment -->
 <div th:fragment="menu">
     <nav style="background-color: #333; color: white; padding: 10px;">
-        <a href="/holdings" style="color: white; margin-right: 15px; text-decoration: none;">Holdings</a>
-        <a href="/refreshConfig" style="color: white; margin-right: 15px; text-decoration: none;">Configuration</a>
+        <a th:href="@{|/holdings?strategy=${session.strategy}|}"
+           style="color: white; margin-right: 15px; text-decoration: none;">
+            Holdings
+        </a>
+
+        <a th:href="@{|/refreshConfig?strategy=${session.strategy}|}"
+           style="color: white; margin-right: 15px; text-decoration: none;">
+            Configuration
+        </a>
     </nav>
 </div>
 

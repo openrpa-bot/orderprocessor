@@ -16,8 +16,11 @@ public class AppConfig {
     private String ip;
     private String apiKey;
     private String port;
+    private String description;
+    private String stretigy;
     private Boolean isEnabled;
     private Boolean isDefault;
+
 
     @Column(name = "last_refreshed")
     private LocalDateTime lastRefreshed;
