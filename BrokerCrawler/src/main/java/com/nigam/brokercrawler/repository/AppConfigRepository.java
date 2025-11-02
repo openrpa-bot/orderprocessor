@@ -4,9 +4,11 @@ import com.nigam.brokercrawler.entity.AppConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Optional;
 
+@RepositoryRestResource
 public interface AppConfigRepository extends JpaRepository<AppConfig, Long> {
 
     Optional<AppConfig> findByIsDefaultTrue();
@@ -14,6 +16,6 @@ public interface AppConfigRepository extends JpaRepository<AppConfig, Long> {
     Optional<AppConfig> findByIp(String ip);
 
     @Modifying
-    @Query("UPDATE AppConfig c SET c.isDefault = false")
+    @Query("UPDATE AppConfig c SET c.isDefault = false WHERE c.isDefault = true")
     void clearDefaultFlags();
 }

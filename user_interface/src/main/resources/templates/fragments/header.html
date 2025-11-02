@@ -1,28 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="header(config)">
-    <div style="background-color:#1e1e2f; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
-
-        <!-- Left section: title + connection info -->
-        <div>
-            <b>OpenAlgo Holdings Dashboard</b>
-            <span style="margin-left:15px;">
-                Connected to:
-                <span th:text="${config != null ? config.ip : 'Unknown'}"></span> :
-                <span th:text="${config != null ? config.port : '-'}"></span>
-            </span>
-        </div>
-
-        <!-- Right section: refresh button with preserved strategy -->
-        <div>
-            <form th:action="@{|/holdings?strategy=${session.strategy}|}" method="get" style="display:inline;">
-                <button type="submit"
-                        style="background-color:#3b82f6; border:none; color:white; padding:6px 12px; border-radius:5px; cursor:pointer;">
-                    🔄 Refresh
-                </button>
-            </form>
-        </div>
+<!-- Reusable Header Fragment -->
+<div th:fragment="header-bar(config, strategy)">
+    <div class="header-bar border rounded p-2 mb-3 bg-light">
+        <strong>Server:</strong> <span th:text="${config.server}"></span> |
+        <strong>IP:</strong> <span th:text="${config.ip}"></span> |
+        <strong>Port:</strong> <span th:text="${config.port}"></span> |
+        <strong>API Key:</strong> <span th:text="${config.apiKey}"></span> |
+        <strong>Strategy:</strong> <span th:text="${config.strategy}"></span>
     </div>
 </div>
 </body>

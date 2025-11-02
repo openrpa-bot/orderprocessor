@@ -55,18 +55,7 @@
 <div th:replace="fragments/menu :: menu"></div>
 
 <!-- Header / Config Bar -->
-<div class="header-bar">
-    <h2 th:text="'OpenAlgo Holdings Dashboard — Connected to: ' + ${config.ip} + ' : ' + ${config.port}"></h2>
-
-    <!-- Preserve strategy in Refresh -->
-    <form th:action="@{|/refreshConfig?strategy=${session.strategy}|}" method="post" style="margin:0;">
-        <input type="hidden" name="server" th:value="${config.server}" />
-        <input type="hidden" name="ip" th:value="${config.ip}" />
-        <input type="hidden" name="port" th:value="${config.port}" />
-        <input type="hidden" name="apiKey" th:value="${config.apiKey}" />
-        <button class="refresh-btn" type="submit">🔄 Refresh</button>
-    </form>
-</div>
+<div th:replace="fragments/header :: header-bar(${config}, ${session.strategy})"></div>
 
 <!-- Error Display -->
 <div th:if="${error}" style="color:red; margin-top:10px;">
@@ -74,7 +63,7 @@
 </div>
 
 <!-- Holdings Table with Sell Option -->
-<form th:action="@{|/holdings/sellAll?strategy=${session.strategy}|}" method="post">
+<form th:action="@{|/holdings/sellAll?configid=${session.configid}|}" method="post">
     <table>
         <thead>
         <tr>
@@ -102,12 +91,6 @@
 
     <!-- Strategy input + Sell button -->
     <div class="sell-container">
-        <input
-                type="text"
-                name="strategy"
-                class="strategy-input"
-                th:value="${session.strategy}"
-                placeholder="Enter strategy name" />
         <button type="submit" class="sell-btn">💰 Sell Selected</button>
     </div>
 </form>

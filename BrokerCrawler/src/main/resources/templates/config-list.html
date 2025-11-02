@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>App Config Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        tr.default-row {
+            background-color: #e6ffe6 !important;
+        }
+    </style>
+</head>
+<body class="p-4">
+<!-- Navigation Menu -->
+<div th:replace="fragments/menu :: menu"></div>
+
+<h2 class="mb-4">Application Configuration</h2>
+
+<!-- Add Form -->
+<form th:action="@{/config/save}"
+      th:object="${newConfig}"
+      method="post"
+      class="mb-3 border p-3 rounded bg-light"
+      th:attr="aria-disabled=${editConfig != null}">
+    <fieldset th:attr="disabled=${editConfig != null}">
+        <div class="row g-2 align-items-center">
+            <div class="col"><input th:field="*{server}" placeholder="Server" class="form-control"/></div>
+            <div class="col"><input th:field="*{ip}" placeholder="IP" class="form-control"/></div>
+            <div class="col"><input th:field="*{apiKey}" placeholder="API Key" class="form-control"/></div>
+            <div class="col"><input th:field="*{port}" placeholder="Port" class="form-control"/></div>
+            <div class="col"><input th:field="*{description}" placeholder="Description" class="form-control"/></div>
+            <div class="col"><input th:field="*{stretigy}" placeholder="Strategy" class="form-control"/></div>
+            <!-- Add this inside the Add Form fieldset -->
+            <div class="col-auto form-check ms-3">
+                <input th:field="*{isEnabled}" type="checkbox" class="form-check-input" id="enabledAdd"/>
+                <label class="form-check-label" for="enabledAdd">Enabled</label>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn btn-success" type="submit">Add</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<!-- Edit Form -->
+<div th:if="${editConfig}">
+    <form th:action="@{/config/update}"
+          th:object="${editConfig}"
+          method="post"
+          class="mb-3 border p-3 rounded bg-light">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="row g-2 align-items-center">
+            <!-- Read-only ID -->
+            <div class="col-1">
+                <input th:value="*{id}" class="form-control" readonly/>
+            </div>
+
+            <div class="col"><input th:field="*{server}" placeholder="Server" class="form-control"/></div>
+            <div class="col"><input th:field="*{ip}" placeholder="IP" class="form-control"/></div>
+            <div class="col"><input th:field="*{apiKey}" placeholder="API Key" class="form-control"/></div>
+            <div class="col"><input th:field="*{port}" placeholder="Port" class="form-control"/></div>
+            <div class="col"><input th:field="*{description}" placeholder="Description" class="form-control"/></div>
+            <div class="col"><input th:field="*{stretigy}" placeholder="Strategy" class="form-control"/></div>
+
+            <!-- Enabled toggle -->
+            <div class="col-auto form-check ms-3">
+                <input th:field="*{isEnabled}" type="checkbox" class="form-check-input" id="enabledEdit"/>
+                <label class="form-check-label" for="enabledEdit">Enabled</label>
+            </div>
+
+            <!-- No Default checkbox here -->
+
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <a th:href="@{/config}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Config Table -->
+<table class="table table-bordered table-striped mt-3 align-middle">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Server</th>
+        <th>IP</th>
+        <th>API Key</th>
+        <th>Port</th>
+        <th>Description</th>
+        <th>Strategy</th>
+        <th>Enabled</th>
+        <th>Default</th>
+        <th>Last Refreshed</th>
+        <th>Holdings</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- ✅ Null-safe handling for default row -->
+    <tr th:each="c : ${configs}" th:classappend="${c.isDefault == true} ? 'default-row'">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.server}"></td>
+        <td th:text="${c.ip}"></td>
+        <td th:text="${c.apiKey}"></td>
+        <td th:text="${c.port}"></td>
+        <td th:text="${c.description}"></td>
+        <td th:text="${c.stretigy}"></td>
+        <td><input type="checkbox" th:checked="${c.isEnabled}" disabled/></td>
+        <td><input type="checkbox" th:checked="${c.isDefault}" disabled/></td>
+        <td th:text="${#temporals.format(c.lastRefreshed, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+        <!-- Holdings Link -->
+        <td>
+            <a th:href="@{'/holdings?configid=' + ${c.id}}" class="btn btn-sm btn-info">Holdings</a>
+        </td>
+
+        <!-- Actions -->
+        <td>
+            <a th:href="@{'/config/edit/' + ${c.id}}" class="btn btn-sm btn-warning">Edit</a>
+            <a th:href="@{'/config/delete/' + ${c.id}}" class="btn btn-sm btn-danger"
+               onclick="return confirm('Delete this record?')">Delete</a>
+
+            <!-- ✅ Null-safe Set Default logic -->
+            <a th:if="${c.isDefault == null or !c.isDefault}"
+               th:href="@{'/config/set-default/' + ${c.id}}"
+               class="btn btn-sm btn-secondary">Set as Default</a>
+            <span th:if="${c.isDefault == true}" class="badge bg-success ms-1">Default</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
