@@ -21,8 +21,10 @@ java {
 dependencies {
     implementation project(':user_interface')
     //implementation project(':temporalbase')
-    implementation project(':open_algo_communicator')
-    implementation project(':AmibrokerDBCrowler')
+    //implementation project(':open_algo_communicator')
+    implementation project(':BrokerCrawler')
+    implementation project(':AmibrokerDBCrawler')
+    implementation project(':databasecontroller')
     implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"

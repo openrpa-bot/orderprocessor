@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<!-- Define fragment -->
+<div th:fragment="menu">
+    <nav style="background-color: #333; color: white; padding: 10px;">
+        <a th:href="@{|/holdings?configid=${session.configid}|}"
+           style="color: white; margin-right: 15px; text-decoration: none;">
+            Holdings
+        </a>
+
+        <a th:href="@{|/config|}"
+           style="color: white; margin-right: 15px; text-decoration: none;">
+            Configuration
+        </a>
+    </nav>
+</div>
+
+</body>
+</html>

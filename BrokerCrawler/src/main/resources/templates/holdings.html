@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OpenAlgo Holdings</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0078d7;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .header-bar h2 { margin: 0; font-size: 18px; }
+        .sell-btn {
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .sell-btn:hover { background-color: #005fa3; }
+        .sell-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .strategy-input {
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Menu -->
+<div th:replace="fragments/menu :: menu"></div>
+
+<!-- Header / Config Bar -->
+<div th:replace="fragments/header :: header-bar(${config}, ${session.strategy})"></div>
+
+<!-- Error Display -->
+<div th:if="${error}" style="color:red; margin-top:10px;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- ✅ Proper Form Start -->
+<form th:action="@{/holdings/sellAll}" method="post">
+    <table class="table table-bordered table-striped align-middle">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
+            <th>Symbol</th>
+            <th>Exchange</th>
+            <th>Quantity</th>
+            <th>Avg. Price</th>
+            <th>P&L</th>
+            <th>P&L %</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="holding : ${holdings}">
+            <td><input type="checkbox" name="symbols" class="symbol-checkbox" th:value="${holding.symbol}" /></td>
+            <td th:text="${holding.symbol}"></td>
+            <td th:text="${holding.exchange}"></td>
+            <td th:text="${holding.quantity}"></td>
+            <td th:text="${holding.average_price}"></td>
+            <td th:text="${holding.pnl}"></td>
+            <td th:text="${holding.pnlpercent}"></td>
+            <td th:text="${holding.symbol + ' , ' + holding.exchange + ' , ' + holding.quantity + ' , ' + holding.product}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Strategy input + Sell button -->
+    <div class="sell-container">
+        <button type="submit" class="sell-btn">💰 Sell Selected</button>
+    </div>
+</form>
+<!-- ✅ Proper Form End -->
+
+<!-- ✅ JS for Select All -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll(".symbol-checkbox");
+        selectAll.addEventListener("change", () => {
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        });
+    });
+</script>
+
+</body>
+</html>

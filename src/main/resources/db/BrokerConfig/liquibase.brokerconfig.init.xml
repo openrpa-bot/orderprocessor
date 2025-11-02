@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!-- Create Tenant_Config table if not exists -->
+    <changeSet id="001-create-tenant-config" author="rahul.nigam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="om_Tenant_Config"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="om_Tenant_Config">
+            <column name="tenantName" type="VARCHAR(100)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="port" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isActive" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Insert default entries only if table is empty -->
+    <changeSet id="002-insert-default-tenant-config" author="rahul.nigam">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="om_Tenant_Config"/>
+        </preConditions>
+
+        <insert tableName="om_Tenant_Config">
+            <column name="tenantName" value="shoonya"/>
+            <column name="port" valueNumeric="5000"/>
+            <column name="isActive" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="om_Tenant_Config">
+            <column name="tenantName" value="angelone"/>
+            <column name="port" valueNumeric="5000"/>
+            <column name="isActive" valueBoolean="false"/>
+        </insert>
+
+        <insert tableName="om_Tenant_Config">
+            <column name="tenantName" value="zerodha"/>
+            <column name="port" valueNumeric="5000"/>
+            <column name="isActive" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Reusable Header Fragment -->
+<div th:fragment="header-bar(config, strategy)">
+    <div class="header-bar border rounded p-2 mb-3 bg-light">
+        <strong>Server:</strong> <span th:text="${config.server}"></span> |
+        <strong>IP:</strong> <span th:text="${config.ip}"></span> |
+        <strong>Port:</strong> <span th:text="${config.port}"></span> |
+        <strong>API Key:</strong> <span th:text="${config.apiKey}"></span> |
+        <strong>Strategy:</strong> <span th:text="${config.strategy}"></span>
+    </div>
+</div>
+</body>
+</html>
