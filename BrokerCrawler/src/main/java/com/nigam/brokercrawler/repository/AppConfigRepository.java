@@ -18,4 +18,11 @@ public interface AppConfigRepository extends JpaRepository<AppConfig, Long> {
     @Modifying
     @Query("UPDATE AppConfig c SET c.isDefault = false WHERE c.isDefault = true")
     void clearDefaultFlags();
+
+    // ✅ Check if a default configuration exists (returns true/false)
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM AppConfig c WHERE c.isDefault = true")
+    boolean existsDefaultConfig();
+
+    @Query("SELECT COUNT(c) > 0 FROM AppConfig c")
+    boolean existsAnyConfig();
 }

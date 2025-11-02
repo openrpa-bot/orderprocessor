@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -37,7 +38,7 @@ public class HoldingsController {
     Holdings openalgoQueryExecutor;
 
     @Autowired
-    AppConfigRepository configService;
+    AppConfigRepository appConfigRepository;
 
     public HoldingsController(HoldingServices holdingsService) {
         this.holdingServices = holdingsService;
@@ -49,32 +50,44 @@ public class HoldingsController {
                                HttpSession session,
                                RedirectAttributes redirectAttributes) {
         try {
-            // Step 1: Determine active config ID
-            Long activeConfigId = -1L;
+            // Step 1: Determine which config ID to use
+            Long activeConfigId = null;
 
             if (configid != null && !configid.isEmpty()) {
-                // Save to session for future requests
                 session.setAttribute("configid", configid);
                 activeConfigId = Long.parseLong(configid);
             } else {
-                // Fallback to session
                 Object saved = session.getAttribute("configid");
                 if (saved != null) {
                     activeConfigId = Long.parseLong(saved.toString());
                 }
             }
 
-            // Step 2: Validate config ID
-            if (activeConfigId == null || !configService.existsById(activeConfigId) || activeConfigId == -1L) {
-                redirectAttributes.addFlashAttribute("error", "Invalid or missing configuration ID.");
-                return "redirect:/config";
-            }
-            log.info("Using config ID: {}", activeConfigId);
-            // Step 3: Load configuration
-            AppConfig config = configService.findById(activeConfigId)
-                    .orElseThrow(() -> new IllegalStateException("Config not found for ID"));
+            // Step 2: Load AppConfig based on ID, fallback to default if missing
+            Optional<AppConfig> configOpt = Optional.empty();
 
-            // Step 4: Load holdings data using that config
+            if (activeConfigId != null) {
+                configOpt = appConfigRepository.findById(activeConfigId);
+            }
+
+            AppConfig config = null;
+
+            if (configOpt.isPresent()) {
+                config = configOpt.get();
+            } else {
+                // Try loading default configuration
+                Optional<AppConfig> defaultConfig = appConfigRepository.findByIsDefaultTrue();
+                if (defaultConfig.isPresent()) {
+                    config = defaultConfig.get();
+                    session.setAttribute("configid", config.getId().toString());
+                } else {
+                    // No config or default available — redirect to config page
+                    redirectAttributes.addFlashAttribute("error", "⚠️ No valid configuration found. Please create or set one as default.");
+                    return "redirect:/config";
+                }
+            }
+
+            // Step 3: Fetch holdings data
             JsonNode jsonNode = openalgoQueryExecutor.sendQuery(
                     config.getIp(), config.getPort(), config.getApiKey());
 
@@ -82,52 +95,83 @@ public class HoldingsController {
             JsonNode holdingsNode = jsonNode.path("data").path("holdings");
             List<Map<String, Object>> holdings = mapper.convertValue(holdingsNode, List.class);
 
-            // Step 5: Add to model
+            // Step 4: Add to model
             model.addAttribute("holdings", holdings);
             model.addAttribute("config", config);
 
+            log.info("Loaded holdings using config ID: {}", config.getId());
             return "holdings";
 
         } catch (Exception e) {
             log.error("Error loading holdings", e);
-            model.addAttribute("error", "Failed to load holdings: " + e.getMessage());
-            return "error";
+            redirectAttributes.addFlashAttribute("error", "❌ Failed to load holdings: " + e.getMessage());
+            return "redirect:/config";
         }
     }
+
+
+
 
     @PostMapping("/holdings/sellAll")
     public String sellSelectedHoldings(@RequestParam(value = "symbols", required = false) List<String> symbols,
                                        @RequestParam(required = false) String strategy,
-                                       Model model,
                                        HttpSession session,
-                                       RedirectAttributes redirectAttributes) throws IOException {
-        // Step 1: Validate selected symbols
-        if (symbols == null || symbols.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "⚠️ No holdings selected for selling.");
+                                       RedirectAttributes redirectAttributes) {
+        try {
+            // Step 1: Validate selected symbols
+            if (symbols == null || symbols.isEmpty()) {
+                redirectAttributes.addFlashAttribute("message", "⚠️ No holdings selected for selling.");
+                return "redirect:/holdings";
+            }
+
+            // Step 2: Resolve active config from session
+            Object saved = session.getAttribute("configid");
+            AppConfig config = null;
+
+            if (saved != null) {
+                Long configId = Long.parseLong(saved.toString());
+                config = appConfigRepository.findById(configId).orElse(null);
+            }
+
+            // Step 3: Fallback to default config if session one missing
+            if (config == null) {
+                config = appConfigRepository.findByIsDefaultTrue().orElse(null);
+            }
+
+            // Step 4: Redirect if no valid config found
+            if (config == null) {
+                redirectAttributes.addFlashAttribute("error", "❌ No valid configuration found. Please configure one first.");
+                return "redirect:/config";
+            }
+
+            // Step 5: Validate or use default strategy
+            if (strategy == null || strategy.isBlank()) {
+                strategy = (config.getStrategy() != null && !config.getStrategy().isBlank())
+                        ? config.getStrategy()
+                        : "default";
+            }
+
+            // Step 6: Perform sell operation
+            holdingServices.Sell(config, openalgoQueryExecutor, symbols, strategy);
+
+            // Step 7: Flash success message
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    String.format("✅ Sold %d holdings successfully using Config: %s (%s:%s)",
+                            symbols.size(),
+                            config.getServer(),
+                            config.getIp(),
+                            config.getPort())
+            );
+
+            return "redirect:/holdings";
+
+        } catch (Exception e) {
+            log.error("Error during sellAll operation", e);
+            redirectAttributes.addFlashAttribute("error", "❌ Failed to sell holdings: " + e.getMessage());
             return "redirect:/holdings";
         }
-
-        // Step 2: Resolve active config from session
-        Object saved = session.getAttribute("configid");
-        if (saved == null) {
-            redirectAttributes.addFlashAttribute("error", "❌ No configuration selected. Please go to the Config page first.");
-            return "redirect:/config";
-        }
-
-        Long configId = Long.parseLong(saved.toString());
-        AppConfig config = configService.findById(configId)
-                .orElseThrow(() -> new IllegalStateException("Configuration not found for ID: " + configId));
-
-        // Step 3: Validate or default strategy
-        if (strategy == null || strategy.isBlank()) {
-            strategy = config.getStrategy() != null ? config.getStrategy() : "default";
-        }
-
-        // Step 4: Perform sell operation
-        holdingServices.Sell(config, openalgoQueryExecutor, symbols, strategy);
-
-        // Step 5: Set success message and redirect
-        redirectAttributes.addFlashAttribute("message", "✅ Selected holdings sold successfully using config: " + config.getServer());
-        return "redirect:/holdings";
     }
+
+
 }
