@@ -28,7 +28,7 @@
             <div class="col"><input th:field="*{apiKey}" placeholder="API Key" class="form-control"/></div>
             <div class="col"><input th:field="*{port}" placeholder="Port" class="form-control"/></div>
             <div class="col"><input th:field="*{description}" placeholder="Description" class="form-control"/></div>
-            <div class="col"><input th:field="*{stretigy}" placeholder="Strategy" class="form-control"/></div>
+            <div class="col"><input th:field="*{strategy}" placeholder="Strategy" class="form-control"/></div>
             <!-- Add this inside the Add Form fieldset -->
             <div class="col-auto form-check ms-3">
                 <input th:field="*{isEnabled}" type="checkbox" class="form-check-input" id="enabledAdd"/>
@@ -61,7 +61,7 @@
             <div class="col"><input th:field="*{apiKey}" placeholder="API Key" class="form-control"/></div>
             <div class="col"><input th:field="*{port}" placeholder="Port" class="form-control"/></div>
             <div class="col"><input th:field="*{description}" placeholder="Description" class="form-control"/></div>
-            <div class="col"><input th:field="*{stretigy}" placeholder="Strategy" class="form-control"/></div>
+            <div class="col"><input th:field="*{strategy}" placeholder="Strategy" class="form-control"/></div>
 
             <!-- Enabled toggle -->
             <div class="col-auto form-check ms-3">
@@ -108,7 +108,7 @@
         <td th:text="${c.apiKey}"></td>
         <td th:text="${c.port}"></td>
         <td th:text="${c.description}"></td>
-        <td th:text="${c.stretigy}"></td>
+        <td th:text="${c.strategy}"></td>
         <td><input type="checkbox" th:checked="${c.isEnabled}" disabled/></td>
         <td><input type="checkbox" th:checked="${c.isDefault}" disabled/></td>
         <td th:text="${#temporals.format(c.lastRefreshed, 'yyyy-MM-dd HH:mm:ss')}"></td>

@@ -42,7 +42,7 @@ public class AppConfigController {
         defaultConfig.setServer(defaultServerName);
         defaultConfig.setIp(defaultServerHost);
         defaultConfig.setPort(defaultServerPort);
-        defaultConfig.setStretigy(strategy);
+        defaultConfig.setStrategy(strategy);
         defaultConfig.setDescription("");
         defaultConfig.setIsEnabled(true);
         defaultConfig.setIsDefault(false);
@@ -70,7 +70,7 @@ public class AppConfigController {
         defaultConfig.setServer(defaultServerName);
         defaultConfig.setIp(defaultServerHost);
         defaultConfig.setPort(defaultServerPort);
-        defaultConfig.setStretigy(strategy);
+        defaultConfig.setStrategy(strategy);
         defaultConfig.setDescription("Non Default configuration");
         defaultConfig.setIsEnabled(true);
         defaultConfig.setIsDefault(false);

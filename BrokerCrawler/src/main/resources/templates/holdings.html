@@ -74,19 +74,24 @@
             <th>Average Price</th>
             <th>PNL</th>
             <th>PNL %</th>
+            <th>To Add in OpenAlgo Strategy:</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="holding : ${holdings}">
-            <td><input type="checkbox" name="symbols" th:value="${holding.symbol}" /></td>
+            <td>
+                <input type="checkbox" name="symbols" th:value="${holding.symbol}" />
+            </td>
             <td th:text="${holding.symbol}"></td>
             <td th:text="${holding.exchange}"></td>
             <td th:text="${holding.quantity}"></td>
             <td th:text="${holding.average_price}"></td>
             <td th:text="${holding.pnl}"></td>
             <td th:text="${holding.pnlpercent}"></td>
+            <td th:text="${holding.symbol + ',' + holding.exchange + ',' + holding.quantity + ',' + holding.product}"></td>
         </tr>
         </tbody>
+
     </table>
 
     <!-- Strategy input + Sell button -->

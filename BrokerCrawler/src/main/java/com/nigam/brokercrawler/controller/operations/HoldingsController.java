@@ -120,7 +120,7 @@ public class HoldingsController {
 
         // Step 3: Validate or default strategy
         if (strategy == null || strategy.isBlank()) {
-            strategy = config.getStretigy() != null ? config.getStretigy() : "default";
+            strategy = config.getStrategy() != null ? config.getStrategy() : "default";
         }
 
         // Step 4: Perform sell operation

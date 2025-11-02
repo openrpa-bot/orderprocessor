@@ -17,7 +17,7 @@ public class AppConfig {
     private String apiKey;
     private String port;
     private String description;
-    private String stretigy;
+    private String strategy;
     private Boolean isEnabled;
     private Boolean isDefault;
 
