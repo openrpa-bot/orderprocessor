@@ -19,7 +19,7 @@ public final class AfterMarketCrawler extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         log.info("executeInternal data download job Started");
         //jmsTemplate.convertAndSend("Job1", "Rahul");
-        //marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2_10D");
+        marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2_10D");
         log.info("executeInternal data download job End");
     }
 }

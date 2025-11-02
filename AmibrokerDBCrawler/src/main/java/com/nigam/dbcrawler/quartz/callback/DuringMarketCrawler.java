@@ -18,7 +18,7 @@ public final class DuringMarketCrawler extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         log.info("executeInternal data Cleanup job Started");
         //jmsTemplate.convertAndSend("Job1", "Rahul");
-        //marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2");
+        marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2");
         log.info("executeInternal data Cleanup job End");
     }
 }
