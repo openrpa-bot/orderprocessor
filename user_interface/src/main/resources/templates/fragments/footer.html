@@ -1,0 +1,38 @@
+<!-- templates/fragments/footer.html -->
+<footer th:fragment="appFooter">
+    <div style="border-top:1px solid #ccc; margin-top:30px; padding:15px; text-align:center;">
+        <h4>Quick Links</h4>
+        <nav id="quick-links" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+            <!-- Links will be populated by JavaScript -->
+        </nav>
+    </div>
+
+    <script>
+        (function() {
+          const quickLinks = [
+            { label: 'PGAdmin', path: '/', port: 5050 },
+            { label: 'Kafka UI', path: '/', port: 8089 },
+            { label: 'Kafka Dashboard', path: '/', port: 8080 },
+            { label: 'Zerodha', path: '/', port: 5000 },
+            { label: 'Shoonya', path: '/', port: 5001 },
+            { label: 'Angelone', path: '/', port: 5002 },
+            { label: 'Portainer', path: '/', port: 9000 },
+            { label: 'Temporal UI', path: '/', port: 8092 }
+          ];
+
+          const host = window.location.hostname;
+          const container = document.getElementById('quick-links');
+
+          quickLinks.forEach(link => {
+            const a = document.createElement('a');
+            a.href = `http://${host}:${link.port}${link.path}`; // use each link’s port
+            a.target = '_blank';
+            a.textContent = link.label;
+            a.style.textDecoration = 'none';
+            a.style.color = '#007bff';
+            container.appendChild(a);
+          });
+        })();
+    </script>
+
+</footer>

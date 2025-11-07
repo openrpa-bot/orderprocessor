@@ -1,18 +1,26 @@
 package com.nigam.openalgo.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-/**
- * Represents a single holding entry from OpenAlgo.
- */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HoldingItem {
 
     private String symbol;
     private String exchange;
     private String product;
-    private double average_price;
-    private double quantity;
+
+    @JsonProperty(defaultValue = "0.0")
+    private double average_price;  // default 0.0 if missing
+
+    @JsonProperty(defaultValue = "0")
+    private double quantity;       // default 0 if missing
+
+    @JsonProperty(defaultValue = "0.0")
     private double pnl;
+
+    @JsonProperty(defaultValue = "0.0")
     private double pnlpercent;
 }
