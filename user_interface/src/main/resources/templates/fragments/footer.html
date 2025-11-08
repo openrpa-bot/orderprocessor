@@ -1,0 +1,72 @@
+<!-- templates/fragments/footer.html -->
+<footer th:fragment="appFooter">
+    <div style="border-top:1px solid #ccc; margin-top:30px; padding:15px; text-align:center;">
+        <h4>Quick Links</h4>
+        <nav id="quick-links" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+            <!-- Links will be populated by JavaScript -->
+        </nav>
+    </div>
+
+    <script>
+        (function() {
+          const quickLinks = [
+            { label: 'PGAdmin', path: '/', port: 5050 },
+            { label: 'Kafka UI', path: '/', port: 8089 },
+            { label: 'Kafka Dashboard', path: '/', port: 8080 },
+            { label: 'Zerodha', path: '/', port: 5000 },
+            { label: 'Shoonya', path: '/', port: 5001 },
+            { label: 'Angelone', path: '/', port: 5002 },
+            { label: 'Portainer', path: '/', port: 9000 },
+            { label: 'Temporal UI', path: '/', port: 8092 },
+            { label: 'hr', path: '/', port: 8092 },
+            { label: 'Nginx Rest Proxy', path: '/topics', port: 8082 },
+            { label: 'Rest Proxy 1', path: '/topics', port: 8020 },
+            { label: 'Rest Proxy 2', path: '/topics', port: 8021 },
+            { label: 'Rest Proxy 3', path: '/topics', port: 8022 },
+            { label: 'Rest Proxy 4', path: '/topics', port: 8023 },
+            { label: 'Rest Proxy 5', path: '/topics', port: 8024 },
+            { label: 'Rest Proxy 6', path: '/topics', port: 8025 },
+            { label: 'Rest Proxy 7', path: '/topics', port: 8026 },
+            { label: 'Rest Proxy 8', path: '/topics', port: 8027 },
+            { label: 'Rest Proxy 9', path: '/topics', port: 8028 },
+            { label: 'Rest Proxy 10', path: '/topics', port: 8029 },
+            { label: 'Rest Proxy 11', path: '/topics', port: 8030 },
+            { label: 'Rest Proxy 12', path: '/topics', port: 8031 },
+            { label: 'Rest Proxy 13', path: '/topics', port: 8032 },
+            { label: 'Rest Proxy 14', path: '/topics', port: 8033 },
+            { label: 'Rest Proxy 15', path: '/topics', port: 8034 },
+            { label: 'Rest Proxy 16', path: '/topics', port: 8035 },
+            { label: 'Rest Proxy 17', path: '/topics', port: 8036 },
+            { label: 'Rest Proxy 18', path: '/topics', port: 8037 },
+            { label: 'Rest Proxy 19', path: '/topics', port: 8038 },
+            { label: 'Rest Proxy 20', path: '/topics', port: 8039 }
+          ];
+
+          const host = window.location.hostname;
+          const container = document.getElementById('quick-links');
+
+          let hrInserted = false;
+
+          quickLinks.forEach(link => {
+            // Insert horizontal line after "hr" link
+            if (!hrInserted && link.label === 'hr') {
+              const hr = document.createElement('hr');
+              hr.style.width = '100%';
+              hr.style.margin = '15px 0';
+              container.appendChild(hr);
+              hrInserted = true;
+              return; // skip rendering "hr" as a link
+            }
+
+            const a = document.createElement('a');
+            a.href = `http://${host}:${link.port}${link.path}`;
+            a.target = '_blank';
+            a.textContent = link.label;
+            a.style.textDecoration = 'none';
+            a.style.color = '#007bff';
+            a.style.margin = '0 10px';
+            container.appendChild(a);
+          });
+        })();
+    </script>
+</footer>

@@ -3,7 +3,6 @@ package com.nigam.brokercrawler.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nigam.brokercrawler.entity.AppConfig;
-
 import com.nigam.openalgo.api.account_api.Holdings;
 import com.nigam.openalgo.api.dto.HoldingItem;
 import com.nigam.openalgo.api.orders_api.PlaceOrder;
@@ -27,7 +26,7 @@ public class HoldingServices {
     private PlaceOrder placeOrder;
 
     /**
-     * Iterates over all holdings and sells those whose symbols match the given list.
+     * Iterates over all holdings and sells/buys those whose symbols match the given list.
      */
     public String Sell(AppConfig config, Holdings holdings, List<String> symbols, String strategy) throws IOException {
         StringBuilder retVal = new StringBuilder();
@@ -50,12 +49,16 @@ public class HoldingServices {
                 HoldingItem holdingItem = objectMapper.treeToValue(node, HoldingItem.class);
                 String symbol = holdingItem.getSymbol();
 
+                if (symbol == null || symbol.isEmpty()) {
+                    log.warn("Skipping holding with missing symbol: {}", node);
+                    continue;
+                }
+
                 if (symbols.contains(symbol)) {
-                    log.info("Attempting to sell: {} (Qty: {})", symbol, holdingItem.getQuantity());
-                    String action = "SELL";
-                    if (holdingItem.getQuantity()<0){
-                        action = "BUY";
-                    }
+                    String action = holdingItem.getQuantity() < 0 ? "BUY" : "SELL";
+
+                    log.info("Attempting {}: {} (Qty: {})", action, symbol, holdingItem.getQuantity());
+
                     TradeOrder tradeOrder = new TradeOrder.Builder()
                             .apikey(config.getApiKey())
                             .strategy(strategy)
@@ -64,20 +67,19 @@ public class HoldingServices {
                             .exchange(holdingItem.getExchange())
                             .pricetype("MARKET")
                             .product(holdingItem.getProduct())
-                            .quantity(String.format("%.0f", holdingItem.getQuantity()))
+                            .quantity(String.format("%.0f", Math.abs(holdingItem.getQuantity())))
                             .build();
 
                     JsonNode response = placeOrder.sendQuery(config.getIp(), config.getPort(), tradeOrder);
+                    log.info("{} response for {}: {}", action, symbol, response);
 
-
-                    log.info("Sell response for {}: {}", symbol, response);
                     soldSymbols.add(symbol);
                 } else {
                     skippedSymbols.add(symbol);
                 }
 
             } catch (Exception e) {
-                log.error("Error processing holding entry: {}", e.getMessage());
+                log.error("Error processing holding entry: {}", e.getMessage(), e);
             }
         }
 
