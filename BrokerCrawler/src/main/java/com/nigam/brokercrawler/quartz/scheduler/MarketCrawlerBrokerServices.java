@@ -24,8 +24,8 @@ public class MarketCrawlerBrokerServices implements JobListener {
 
     private static final String DURING_MARKET_JOB_NAME = "DURING_MARKET_BROKER_CRAWLER_JOB";
     private static final String AFTER_MARKET_JOB_NAME = "AFTER_MARKET_BROKER_CRAWLER_JOB";
-    private static final String CRAWLER_JOB_GROUP = "CRAWLER_JOB";
-    private static final String SCHEDULER_SERVICE_GROUP = "SCHEDULER_SERVICE_GROUP";
+    private static final String CRAWLER_JOB_GROUP = "BROKER_CRAWLER_JOB";
+    private static final String SCHEDULER_SERVICE_GROUP = "SCHEDULER_BROKER_SERVICE_GROUP";
 
     @Autowired
     private Scheduler scheduler;
