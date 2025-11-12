@@ -1,14 +1,11 @@
-<!-- templates/fragments/footer.html -->
 <footer th:fragment="appFooter">
     <div style="border-top:1px solid #ccc; margin-top:30px; padding:15px; text-align:center;">
         <h4>Quick Links</h4>
-        <nav id="quick-links" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
-            <!-- Links will be populated by JavaScript -->
-        </nav>
+        <nav id="quick-links" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;"></nav>
     </div>
 
     <script>
-        (function() {
+        (function () {
           const quickLinks = [
             { label: 'hr', path: '/', port: 8092 },
             { label: 'Grafana:admin/admin', path: '/', port: 5011 },
@@ -49,8 +46,8 @@
             { label: 'Rest Proxy 17', path: '/topics', port: 8036 },
             { label: 'Rest Proxy 18', path: '/topics', port: 8037 },
             { label: 'Rest Proxy 19', path: '/topics', port: 8038 },
-            { label: 'Rest Proxy 20', path: '/topics', port: 8039 }
-            { label: 'hr', path: '/', port: 8092 },
+            { label: 'Rest Proxy 20', path: '/topics', port: 8039 },
+            { label: 'hr', path: '/', port: 8092 }
           ];
 
           const host = window.location.hostname;
@@ -62,7 +59,7 @@
               hr.style.width = '100%';
               hr.style.margin = '15px 0';
               container.appendChild(hr);
-              return; // skip rendering the "hr" link itself
+              return;
             }
 
             const a = document.createElement('a');
@@ -71,7 +68,9 @@
             a.textContent = link.label;
             a.style.textDecoration = 'none';
             a.style.color = '#007bff';
-            a.style.margin = '0 10px';
+            a.style.transition = 'color 0.2s';
+            a.onmouseover = () => (a.style.color = '#0056b3');
+            a.onmouseout = () => (a.style.color = '#007bff');
             container.appendChild(a);
           });
         })();
