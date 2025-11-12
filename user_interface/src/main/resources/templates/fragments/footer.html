@@ -56,17 +56,13 @@
           const host = window.location.hostname;
           const container = document.getElementById('quick-links');
 
-          let hrInserted = false;
-
           quickLinks.forEach(link => {
-            // Insert horizontal line after "hr" link
-            if (!hrInserted && link.label === 'hr') {
+            if (link.label === 'hr') {
               const hr = document.createElement('hr');
               hr.style.width = '100%';
               hr.style.margin = '15px 0';
               container.appendChild(hr);
-              hrInserted = true;
-              return; // skip rendering "hr" as a link
+              return; // skip rendering the "hr" link itself
             }
 
             const a = document.createElement('a');
