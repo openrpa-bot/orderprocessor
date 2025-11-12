@@ -14,8 +14,8 @@ repositories {
 }
 
 java {
-    //sourceCompatibility = JavaVersion.VERSION_21
-    //targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 dependencies {
@@ -76,7 +76,10 @@ subprojects {
     repositories {
         mavenCentral()
     }
-
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
         implementation "org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion"
