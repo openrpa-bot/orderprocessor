@@ -25,6 +25,6 @@ public class DbCrawlerController5Min {
             // Process the JSON payload
 
 
-            return "Received JSON payload: " + marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2");
+            return "Received JSON payload: " + marketDBCrawler.processAllRecords("ag_day");
         }
 }

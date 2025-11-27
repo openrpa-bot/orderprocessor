@@ -23,6 +23,6 @@ public class DbCrawlerController200Daily {
             log.info("Received JSON payload: " + jsonPayload);
             // Process the JSON payload
 
-            return "Received JSON payload: " + marketDBCrawler.processAllRecords("Amibroker_Grafana_Algo2_200D");
+            return "Received JSON payload: " + marketDBCrawler.processAllRecords("ag_day_200d");
         }
 }

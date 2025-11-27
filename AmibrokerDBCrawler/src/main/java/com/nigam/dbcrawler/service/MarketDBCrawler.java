@@ -1,11 +1,11 @@
 package com.nigam.dbcrawler.service;
 
 import com.nigam.dbcrawler.dto.ResistanceSupport;
-import com.nigam.dbcrawler.entity.AmibrokerGrafanaAlgoRecord;
 import com.nigam.dbcrawler.entity.ResistenceSupportRecord;
+import com.nigam.dbcrawler.entity.readonly.AgDay;
 import com.nigam.dbcrawler.processors.AmibrokerGrafanaAlgoRecordProcessor;
-import com.nigam.dbcrawler.repository.DynamicAmibrokerReadOnlyRepository;
 import com.nigam.dbcrawler.repository.DynamicResistenceSupportRepository;
+import com.nigam.dbcrawler.repository.readonly.AgDayReadRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class MarketDBCrawler {
 
     private static final Logger log = LoggerFactory.getLogger(MarketDBCrawler.class);
 
-    private final DynamicAmibrokerReadOnlyRepository dynamicAmibrokerReadOnlyRepository;
+    private final AgDayReadRepository agDayReadRepository;
 
     private final DynamicResistenceSupportRepository dynamicResistanceSupportRepository;
 
     @Autowired
-    public MarketDBCrawler(DynamicAmibrokerReadOnlyRepository dynamicAmibrokerReadOnlyRepository, DynamicResistenceSupportRepository dynamicResistanceSupportRepository) {
-        this.dynamicAmibrokerReadOnlyRepository = dynamicAmibrokerReadOnlyRepository;
+    public MarketDBCrawler(AgDayReadRepository agDayReadRepository, DynamicResistenceSupportRepository dynamicResistanceSupportRepository) {
+        this.agDayReadRepository = agDayReadRepository;
         this.dynamicResistanceSupportRepository = dynamicResistanceSupportRepository;
     }
 
@@ -36,12 +36,12 @@ public class MarketDBCrawler {
     /**
      * Fetch all records from the table.
      *
-     * @param tableName Table to query (must match Amibroker_Grafana_Algo*)
+     * @param tableName Table to query (must match ag_day*)
      */
-    public List<AmibrokerGrafanaAlgoRecord> processAllRecords(String tableName) {
+    public List<AgDay> processAllRecords(String tableName) {
 
         // Fetch all required data tables
-        List<AmibrokerGrafanaAlgoRecord> allRecords = dynamicAmibrokerReadOnlyRepository.findAll(tableName);
+        List<AgDay> allRecords = agDayReadRepository.findAll(tableName);
         List<ResistenceSupportRecord> allQuarterly_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Quarterly");
         List<ResistenceSupportRecord> allMonthly_ResistanceSupportRecord = dynamicResistanceSupportRepository.findAll("ResistenceSupport_Monthly");
 
@@ -83,7 +83,7 @@ public class MarketDBCrawler {
         //log.info("Sorted Monthly DTO list by ResistanceSupport value");
 
         // Optional: process Amibroker records
-        for (AmibrokerGrafanaAlgoRecord record : allRecords) {
+        for (AgDay record : allRecords) {
             recordProcessor.ProcessRecord(record, combinedList, dtoList_Quarterly, dtoList_Monthly);
         }
 
