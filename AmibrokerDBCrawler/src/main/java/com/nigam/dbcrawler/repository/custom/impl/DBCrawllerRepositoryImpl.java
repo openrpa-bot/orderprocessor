@@ -17,7 +17,7 @@ public class DBCrawllerRepositoryImpl implements DBCrawllerRepositoryCustom {
 
     @Override
     public void upsert(DBCrawller_ResistenceSupport entity) {
-        DBCrawllerId id = new DBCrawllerId(entity.getPkField(), entity.getCurrentIndex());
+        DBCrawllerId id = new DBCrawllerId(entity.getPk_field(), entity.getCandleDate());
 
         // Check if record exists
         DBCrawller_ResistenceSupport existing = entityManager.find(DBCrawller_ResistenceSupport.class, id);

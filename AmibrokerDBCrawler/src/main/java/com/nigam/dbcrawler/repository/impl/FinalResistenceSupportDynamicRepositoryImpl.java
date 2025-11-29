@@ -65,32 +65,32 @@ public class FinalResistenceSupportDynamicRepositoryImpl
     }
 
     @Override
-    public Final_Resistence_Support findById(String tableName, String pkField, Double candleDate) {
+    public Final_Resistence_Support findById(String tableName, String pk_field, Double candleDate) {
 
         String sql = """
                 SELECT * FROM %s
-                WHERE pk_field = :pkField
+                WHERE pk_field = :pk_field
                   AND candle_Date = :candle_Date
                 """.formatted(q(tableName));
 
         Query q = entityManager.createNativeQuery(sql, Final_Resistence_Support.class);
-        q.setParameter("pkField", pkField);
-        q.setParameter("currentIndex", candleDate);
+        q.setParameter("pk_field", pk_field);
+        q.setParameter("candle_Date", candleDate);
 
         List<?> result = q.getResultList();
         return result.isEmpty() ? null : (Final_Resistence_Support) result.get(0);
     }
 
     @Override
-    public List<Final_Resistence_Support> findByPkField(String tableName, String pkField) {
+    public List<Final_Resistence_Support> findBypk_field(String tableName, String pk_field) {
 
         String sql = """
                 SELECT * FROM %s
-                WHERE pk_field = :pkField
+                WHERE pk_field = :pk_field
                 """.formatted(q(tableName));
 
         Query q = entityManager.createNativeQuery(sql, Final_Resistence_Support.class);
-        q.setParameter("pkField", pkField);
+        q.setParameter("pk_field", pk_field);
 
         return q.getResultList();
     }
@@ -108,11 +108,11 @@ public class FinalResistenceSupportDynamicRepositoryImpl
                  long_sl_1, long_sl_2, short_1, short_2,
                  cover_1, cover_2, short_sl_1, short_sl_2)
                 VALUES
-                (:pkField, :currentIndex, :candleDate, :candleDateTime, :tickerName,
+                (:pk_field, :currentIndex, :candleDate, :candleDateTime, :tickerName,
                  :candleTime, :long1, :long2, :sell1, :sell2,
                  :longSl1, :longSl2, :short1, :short2,
                  :cover1, :cover2, :shortSl1, :shortSl2)
-                ON CONFLICT (pk_field, current_index)
+                ON CONFLICT (pk_field, candle_date)
                 DO UPDATE SET
                     candle_date = EXCLUDED.candle_date,
                     candle_date_time = EXCLUDED.candle_date_time,
@@ -134,7 +134,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
 
         Query q = entityManager.createNativeQuery(sql);
 
-        q.setParameter("pkField", r.getPkField());
+        q.setParameter("pk_field", r.getPk_field());
         q.setParameter("currentIndex", r.getCurrentIndex());
         q.setParameter("candleDate", r.getCandleDate());
         q.setParameter("candleDateTime", r.getCandleDateTime());
@@ -157,17 +157,17 @@ public class FinalResistenceSupportDynamicRepositoryImpl
     }
 
     @Override
-    public void delete(String tableName, String pkField, Double currentIndex) {
+    public void delete(String tableName, String pk_field, Double candleDate) {
 
         String sql = """
                 DELETE FROM %s
-                WHERE pk_field = :pkField
-                  AND current_index = :currentIndex
+                WHERE pk_field = :pk_field
+                  AND candle_date = :candleDate
                 """.formatted(q(tableName));
 
         Query q = entityManager.createNativeQuery(sql);
-        q.setParameter("pkField", pkField);
-        q.setParameter("currentIndex", currentIndex);
+        q.setParameter("pk_field", pk_field);
+        q.setParameter("candleDate", candleDate);
 
         q.executeUpdate();
     }

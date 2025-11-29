@@ -5,13 +5,13 @@ import java.util.Objects;
 
 public class AgDayId implements Serializable {
     private Double candleDate;
-    private String pkField;
+    private String pk_field;
 
     public AgDayId() {}
 
-    public AgDayId(Double candleDate, String pkField) {
+    public AgDayId(Double candleDate, String pk_field) {
         this.candleDate = candleDate;
-        this.pkField = pkField;
+        this.pk_field = pk_field;
     }
 
     @Override
@@ -20,11 +20,11 @@ public class AgDayId implements Serializable {
         if (!(o instanceof AgDayId)) return false;
         AgDayId that = (AgDayId) o;
         return Objects.equals(candleDate, that.candleDate)
-                && Objects.equals(pkField, that.pkField);
+                && Objects.equals(pk_field, that.pk_field);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(candleDate, pkField);
+        return Objects.hash(candleDate, pk_field);
     }
 }

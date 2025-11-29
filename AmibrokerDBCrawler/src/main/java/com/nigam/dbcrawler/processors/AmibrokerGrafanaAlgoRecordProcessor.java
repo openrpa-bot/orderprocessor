@@ -82,7 +82,7 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
         DBCrawller_ResistenceSupport dbCrawller_ResistenceSupport = new DBCrawller_ResistenceSupport();
         Final_Resistence_Support final_Resistence_Support = new Final_Resistence_Support();
 
-        dbCrawller_ResistenceSupport.setPkField(record.getPkField());
+        dbCrawller_ResistenceSupport.setPk_field(record.getPk_field());
         dbCrawller_ResistenceSupport.setCurrentIndex(record.getInnerIndex());
         dbCrawller_ResistenceSupport.setCandleDate(record.getCandleDate());
         dbCrawller_ResistenceSupport.setCandleDateTime(record.getCandleDatetime());
@@ -90,7 +90,7 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
         dbCrawller_ResistenceSupport.setCandleTime(record.getCandleTime());
         dbCrawller_ResistenceSupport.setClose(record.getClose());
 
-        final_Resistence_Support.setPkField(record.getPkField());
+        final_Resistence_Support.setPk_field(record.getPk_field());
         final_Resistence_Support.setCurrentIndex(record.getInnerIndex());
         final_Resistence_Support.setCandleDate(record.getCandleDate());
         final_Resistence_Support.setCandleDateTime(record.getCandleDatetime());

@@ -23,14 +23,14 @@ public class DBCrawller_ResistenceSupport implements Serializable {
     // Composite primary key handled with @IdClass
     @Id
     @Column(name = "\"PK_Field\"", nullable = false)
-    private String pkField;
-
-    @Column(name = "\"CurrentIndex\"")
-    private Double currentIndex;
+    private String pk_field;
 
     @Id
     @Column(name = "\"candle_Date\"", nullable = false)
     private Double candleDate;
+
+    @Column(name = "\"CurrentIndex\"")
+    private Double currentIndex;
 
     @Column(name = "\"candle_DateTime\"")
     private Timestamp candleDateTime;

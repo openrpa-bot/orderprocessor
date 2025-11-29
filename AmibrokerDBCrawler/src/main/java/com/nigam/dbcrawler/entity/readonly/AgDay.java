@@ -22,7 +22,7 @@ public class AgDay {
 
     @Id
     @Column(name = "pk_field", nullable = false)
-    private String pkField;
+    private String pk_field;
 
     @Column(name = "previous_candle_date", nullable = false)
     private Double previousCandleDate;

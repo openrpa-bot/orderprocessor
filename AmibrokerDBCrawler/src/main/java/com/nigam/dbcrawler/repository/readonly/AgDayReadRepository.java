@@ -20,20 +20,20 @@ public class AgDayReadRepository {
                 .getResultList();
     }
 
-    public List<AgDay> findByPkField(String tableName, String pkField) {
+    public List<AgDay> findBypk_field(String tableName, String pk_field) {
         String sql = "SELECT * FROM " + tableName + " WHERE pk_field = :pk";
 
         return em.createNativeQuery(sql, AgDay.class)
-                .setParameter("pk", pkField)
+                .setParameter("pk", pk_field)
                 .getResultList();
     }
 
-    public List<AgDay> findByFilters(String tableName, String pkField, Double candleDate) {
+    public List<AgDay> findByFilters(String tableName, String pk_field, Double candleDate) {
         String sql = "SELECT * FROM " + tableName +
                 " WHERE pk_field = :pk AND candle_date = :cd";
 
         return em.createNativeQuery(sql, AgDay.class)
-                .setParameter("pk", pkField)
+                .setParameter("pk", pk_field)
                 .setParameter("cd", candleDate)
                 .getResultList();
     }

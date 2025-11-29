@@ -13,6 +13,6 @@ public class DBCrawllerId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String pkField;
-    private Double currentIndex;
+    private String pk_field;
+    private Double candleDate;
 }

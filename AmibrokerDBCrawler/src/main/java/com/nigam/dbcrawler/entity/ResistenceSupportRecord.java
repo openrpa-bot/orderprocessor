@@ -25,7 +25,7 @@ public class ResistenceSupportRecord implements Serializable {
     // Composite primary key handled with @IdClass
     @Id
     @Column(name = "\"PK_Field\"", nullable = false)
-    private String pkField;
+    private String pk_field;
 
     @Id
     @Column(name = "\"candle_Date\"", nullable = false)

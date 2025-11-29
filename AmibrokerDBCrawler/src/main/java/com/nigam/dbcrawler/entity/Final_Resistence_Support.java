@@ -23,7 +23,7 @@ public class Final_Resistence_Support implements Serializable {
     // Composite primary key handled with @IdClass
     @Id
     @Column(name = "\"pk_field\"", nullable = false)
-    private String pkField;
+    private String pk_field;
 
     @Id
     @Column(name = "\"candle_date\"", nullable = false)

@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface FinalResistenceSupportDynamicRepository {
 
-    Final_Resistence_Support findById(String tableName, String pkField, Double candleDate);
+    Final_Resistence_Support findById(String tableName, String pk_field, Double candleDate);
 
-    List<Final_Resistence_Support> findByPkField(String tableName, String pkField);
+    List<Final_Resistence_Support> findBypk_field(String tableName, String pk_field);
 
     void upsert(String tableName, Final_Resistence_Support row);
 
-    void delete(String tableName, String pkField, Double candleDate);
+    void delete(String tableName, String pk_field, Double candleDate);
 
 }
 
