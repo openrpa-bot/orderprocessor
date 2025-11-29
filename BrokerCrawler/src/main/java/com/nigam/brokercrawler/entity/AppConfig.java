@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "om_app_config")
+@Table(name = "op_app_config")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class AppConfig {
     @Id

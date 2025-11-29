@@ -25,11 +25,11 @@ public class DBCrawller_ResistenceSupport implements Serializable {
     @Column(name = "\"PK_Field\"", nullable = false)
     private String pkField;
 
-    @Id
-    @Column(name = "\"CurrentIndex\"", nullable = false)
+    @Column(name = "\"CurrentIndex\"")
     private Double currentIndex;
 
-    @Column(name = "\"candle_Date\"")
+    @Id
+    @Column(name = "\"candle_Date\"", nullable = false)
     private Double candleDate;
 
     @Column(name = "\"candle_DateTime\"")
