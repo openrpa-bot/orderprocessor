@@ -28,7 +28,10 @@ public class ResistenceSupportRecord implements Serializable {
     private String pkField;
 
     @Id
-    @Column(name = "\"CurrentIndex\"", nullable = false)
+    @Column(name = "\"candle_Date\"", nullable = false)
+    private Double candleDate;
+
+    @Column(name = "\"CurrentIndex\"")
     private Double currentIndex;
 
     @Column(name = "\"Close\"")
@@ -45,9 +48,6 @@ public class ResistenceSupportRecord implements Serializable {
 
     @Column(name = "\"Volume\"")
     private Long volume;
-
-    @Column(name = "\"candle_Date\"")
-    private Double candleDate;
 
     @Column(name = "\"candle_DateTime\"")
     private Timestamp candleDateTime;
