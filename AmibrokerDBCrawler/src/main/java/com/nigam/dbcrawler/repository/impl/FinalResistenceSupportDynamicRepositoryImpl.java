@@ -33,7 +33,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
             pk_field VARCHAR NOT NULL,
             current_index DOUBLE PRECISION,
             candle_date DOUBLE PRECISION  NOT NULL,
-            candle_date_time TIMESTAMP,
+            candle_datetime TIMESTAMP,
             ticker_name VARCHAR,
             candle_time DOUBLE PRECISION,
             long_1 DOUBLE PRECISION,
@@ -103,7 +103,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
 
         String sql = """
                 INSERT INTO %s
-                (pk_field, current_index, candle_date, candle_date_time, ticker_name,
+                (pk_field, current_index, candle_date, candle_datetime, ticker_name,
                  candle_time, long_1, long_2, sell_1, sell_2,
                  long_sl_1, long_sl_2, short_1, short_2,
                  cover_1, cover_2, short_sl_1, short_sl_2)
@@ -115,7 +115,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
                 ON CONFLICT (pk_field, candle_date)
                 DO UPDATE SET
                     candle_date = EXCLUDED.candle_date,
-                    candle_date_time = EXCLUDED.candle_date_time,
+                    candle_datetime = EXCLUDED.candle_datetime,
                     ticker_name = EXCLUDED.ticker_name,
                     candle_time = EXCLUDED.candle_time,
                     long_1 = EXCLUDED.long_1,

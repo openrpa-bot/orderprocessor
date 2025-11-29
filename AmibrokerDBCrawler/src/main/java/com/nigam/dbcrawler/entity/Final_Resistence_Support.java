@@ -32,7 +32,7 @@ public class Final_Resistence_Support implements Serializable {
     @Column(name = "\"current_index\"")
     private Double currentIndex;
 
-    @Column(name = "\"candle_date_time\"")
+    @Column(name = "\"candle_datetime\"")
     private Timestamp candleDateTime;
 
     @Column(name = "\"ticker_name\"")
