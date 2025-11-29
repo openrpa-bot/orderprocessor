@@ -36,6 +36,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
             candle_datetime TIMESTAMP,
             ticker_name VARCHAR,
             candle_time DOUBLE PRECISION,
+            close DOUBLE PRECISION,
             long_1 DOUBLE PRECISION,
             long_2 DOUBLE PRECISION,
             sell_1 DOUBLE PRECISION,
@@ -104,12 +105,12 @@ public class FinalResistenceSupportDynamicRepositoryImpl
         String sql = """
                 INSERT INTO %s
                 (pk_field, current_index, candle_date, candle_datetime, ticker_name,
-                 candle_time, long_1, long_2, sell_1, sell_2,
+                 candle_time, close, long_1, long_2, sell_1, sell_2,
                  long_sl_1, long_sl_2, short_1, short_2,
                  cover_1, cover_2, short_sl_1, short_sl_2)
                 VALUES
                 (:pk_field, :currentIndex, :candleDate, :candleDateTime, :tickerName,
-                 :candleTime, :long1, :long2, :sell1, :sell2,
+                 :candleTime, :close, :long1, :long2, :sell1, :sell2,
                  :longSl1, :longSl2, :short1, :short2,
                  :cover1, :cover2, :shortSl1, :shortSl2)
                 ON CONFLICT (pk_field, candle_date)
@@ -118,6 +119,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
                     candle_datetime = EXCLUDED.candle_datetime,
                     ticker_name = EXCLUDED.ticker_name,
                     candle_time = EXCLUDED.candle_time,
+                    close = EXCLUDED.close,
                     long_1 = EXCLUDED.long_1,
                     long_2 = EXCLUDED.long_2,
                     sell_1 = EXCLUDED.sell_1,
@@ -140,6 +142,7 @@ public class FinalResistenceSupportDynamicRepositoryImpl
         q.setParameter("candleDateTime", r.getCandleDateTime());
         q.setParameter("tickerName", r.getTickerName());
         q.setParameter("candleTime", r.getCandleTime());
+        q.setParameter("close", r.getClose());
         q.setParameter("long1", r.getLong_1());
         q.setParameter("long2", r.getLong_2());
         q.setParameter("sell1", r.getSell_1());

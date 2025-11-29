@@ -96,18 +96,21 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
         final_Resistence_Support.setCandleDateTime(record.getCandleDatetime());
         final_Resistence_Support.setTickerName(record.getEquityName());
         final_Resistence_Support.setCandleTime(record.getCandleTime());
+        final_Resistence_Support.setClose(record.getClose());
 
         if(closestResistence.size() > 0) {
             dbCrawller_ResistenceSupport.setResistence1(closestResistence.get(0).getResistanceSupport());
             dbCrawller_ResistenceSupport.setResistenceName1(closestResistence.get(0).getResistenceSupport_Comment());
             final_Resistence_Support.setSell_1(closestResistence.get(0).getResistanceSupport());
             final_Resistence_Support.setShort_1(closestResistence.get(0).getResistanceSupport());
+            final_Resistence_Support.setShort_sl_1(closestResistence.get(0).getResistanceSupport() + record.getShortSl() - record.getClose());
         }
         if(closestResistence.size() > 1) {
             dbCrawller_ResistenceSupport.setResistence2(closestResistence.get(1).getResistanceSupport());
             dbCrawller_ResistenceSupport.setResistenceName2(closestResistence.get(1).getResistenceSupport_Comment());
             final_Resistence_Support.setSell_2(closestResistence.get(1).getResistanceSupport());
             final_Resistence_Support.setShort_2(closestResistence.get(1).getResistanceSupport());
+            final_Resistence_Support.setShort_sl_2(closestResistence.get(1).getResistanceSupport() + record.getShortSl() - record.getClose());
         }
         if(closestResistence.size() > 2) {
             dbCrawller_ResistenceSupport.setResistence3(closestResistence.get(2).getResistanceSupport());
@@ -122,12 +125,14 @@ public class AmibrokerGrafanaAlgoRecordProcessor {
             dbCrawller_ResistenceSupport.setSupportName1(closestSupport.get(0).getResistenceSupport_Comment());
             final_Resistence_Support.setLong_1(closestSupport.get(0).getResistanceSupport());
             final_Resistence_Support.setCover_1(closestSupport.get(0).getResistanceSupport());
+            final_Resistence_Support.setLong_sl_1(closestSupport.get(0).getResistanceSupport() + record.getClose() - record.getLongSl());
         }
         if(closestSupport.size() > 1) {
             dbCrawller_ResistenceSupport.setSupport2(closestSupport.get(1).getResistanceSupport());
             dbCrawller_ResistenceSupport.setSupportName2(closestSupport.get(1).getResistenceSupport_Comment());
             final_Resistence_Support.setLong_2(closestSupport.get(1).getResistanceSupport());
             final_Resistence_Support.setCover_2(closestSupport.get(1).getResistanceSupport());
+            final_Resistence_Support.setLong_sl_2(closestSupport.get(1).getResistanceSupport() + record.getClose() - record.getLongSl());
         }
         if(closestSupport.size() > 2) {
             dbCrawller_ResistenceSupport.setSupport3(closestSupport.get(2).getResistanceSupport());

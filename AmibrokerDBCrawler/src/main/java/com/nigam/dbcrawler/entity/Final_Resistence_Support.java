@@ -41,6 +41,9 @@ public class Final_Resistence_Support implements Serializable {
     @Column(name = "\"candle_time\"")
     private Double candleTime;
 
+    @Column(name = "\"close\"")
+    private Double close;
+
     @Column(name = "\"long_1\"")
     private Double long_1;
 
